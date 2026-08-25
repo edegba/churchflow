@@ -23,6 +23,7 @@ import { Route as AuthenticatedFirstTimersRouteImport } from './routes/_authenti
 import { Route as AuthenticatedFollowUpRouteImport } from './routes/_authenticated/follow-up'
 import { Route as AuthenticatedGroupsRouteImport } from './routes/_authenticated/groups'
 import { Route as AuthenticatedMembersRouteImport } from './routes/_authenticated/members'
+import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authenticated/onboarding'
 import { Route as AuthenticatedPrayerRequestsRouteImport } from './routes/_authenticated/prayer-requests'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 
@@ -98,6 +99,11 @@ const AuthenticatedMembersRoute = AuthenticatedMembersRouteImport.update({
   path: '/members',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedOnboardingRoute = AuthenticatedOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedPrayerRequestsRoute =
   AuthenticatedPrayerRequestsRouteImport.update({
     id: '/prayer-requests',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/follow-up': typeof AuthenticatedFollowUpRoute
   '/groups': typeof AuthenticatedGroupsRoute
   '/members': typeof AuthenticatedMembersRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
 }
@@ -141,6 +148,7 @@ export interface FileRoutesByTo {
   '/follow-up': typeof AuthenticatedFollowUpRoute
   '/groups': typeof AuthenticatedGroupsRoute
   '/members': typeof AuthenticatedMembersRoute
+  '/onboarding': typeof AuthenticatedOnboardingRoute
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
 }
@@ -160,6 +168,7 @@ export interface FileRoutesById {
   '/_authenticated/follow-up': typeof AuthenticatedFollowUpRoute
   '/_authenticated/groups': typeof AuthenticatedGroupsRoute
   '/_authenticated/members': typeof AuthenticatedMembersRoute
+  '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
 }
@@ -179,6 +188,7 @@ export interface FileRouteTypes {
     | '/follow-up'
     | '/groups'
     | '/members'
+    | '/onboarding'
     | '/prayer-requests'
     | '/reports'
   fileRoutesByTo: FileRoutesByTo
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/follow-up'
     | '/groups'
     | '/members'
+    | '/onboarding'
     | '/prayer-requests'
     | '/reports'
   id:
@@ -214,6 +225,7 @@ export interface FileRouteTypes {
     | '/_authenticated/follow-up'
     | '/_authenticated/groups'
     | '/_authenticated/members'
+    | '/_authenticated/onboarding'
     | '/_authenticated/prayer-requests'
     | '/_authenticated/reports'
   fileRoutesById: FileRoutesById
@@ -324,6 +336,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMembersRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/onboarding': {
+      id: '/_authenticated/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AuthenticatedOnboardingRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/prayer-requests': {
       id: '/_authenticated/prayer-requests'
       path: '/prayer-requests'
@@ -353,6 +372,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFollowUpRoute: typeof AuthenticatedFollowUpRoute
   AuthenticatedGroupsRoute: typeof AuthenticatedGroupsRoute
   AuthenticatedMembersRoute: typeof AuthenticatedMembersRoute
+  AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPrayerRequestsRoute: typeof AuthenticatedPrayerRequestsRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
 }
@@ -369,6 +389,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFollowUpRoute: AuthenticatedFollowUpRoute,
   AuthenticatedGroupsRoute: AuthenticatedGroupsRoute,
   AuthenticatedMembersRoute: AuthenticatedMembersRoute,
+  AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPrayerRequestsRoute: AuthenticatedPrayerRequestsRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,
 }
