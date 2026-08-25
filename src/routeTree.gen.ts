@@ -15,6 +15,7 @@ import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
 import { Route as AuthenticatedCareRadarRouteImport } from './routes/_authenticated/care-radar'
 import { Route as AuthenticatedCommunicationRouteImport } from './routes/_authenticated/communication'
+import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedDepartmentsRouteImport } from './routes/_authenticated/departments'
 import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
 import { Route as AuthenticatedFeedbackRouteImport } from './routes/_authenticated/feedback'
@@ -55,6 +56,11 @@ const AuthenticatedCommunicationRoute =
     path: '/communication',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedDepartmentsRoute =
   AuthenticatedDepartmentsRouteImport.update({
     id: '/departments',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/care-radar': typeof AuthenticatedCareRadarRoute
   '/communication': typeof AuthenticatedCommunicationRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/events': typeof AuthenticatedEventsRoute
   '/feedback': typeof AuthenticatedFeedbackRoute
@@ -126,6 +133,7 @@ export interface FileRoutesByTo {
   '/attendance': typeof AuthenticatedAttendanceRoute
   '/care-radar': typeof AuthenticatedCareRadarRoute
   '/communication': typeof AuthenticatedCommunicationRoute
+  '/dashboard': typeof AuthenticatedDashboardRoute
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/events': typeof AuthenticatedEventsRoute
   '/feedback': typeof AuthenticatedFeedbackRoute
@@ -144,6 +152,7 @@ export interface FileRoutesById {
   '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
   '/_authenticated/care-radar': typeof AuthenticatedCareRadarRoute
   '/_authenticated/communication': typeof AuthenticatedCommunicationRoute
+  '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
   '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/feedback': typeof AuthenticatedFeedbackRoute
@@ -162,6 +171,7 @@ export interface FileRouteTypes {
     | '/attendance'
     | '/care-radar'
     | '/communication'
+    | '/dashboard'
     | '/departments'
     | '/events'
     | '/feedback'
@@ -178,6 +188,7 @@ export interface FileRouteTypes {
     | '/attendance'
     | '/care-radar'
     | '/communication'
+    | '/dashboard'
     | '/departments'
     | '/events'
     | '/feedback'
@@ -195,6 +206,7 @@ export interface FileRouteTypes {
     | '/_authenticated/attendance'
     | '/_authenticated/care-radar'
     | '/_authenticated/communication'
+    | '/_authenticated/dashboard'
     | '/_authenticated/departments'
     | '/_authenticated/events'
     | '/_authenticated/feedback'
@@ -254,6 +266,13 @@ declare module '@tanstack/react-router' {
       path: '/communication'
       fullPath: '/communication'
       preLoaderRoute: typeof AuthenticatedCommunicationRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/dashboard': {
+      id: '/_authenticated/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/departments': {
@@ -326,6 +345,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
   AuthenticatedCareRadarRoute: typeof AuthenticatedCareRadarRoute
   AuthenticatedCommunicationRoute: typeof AuthenticatedCommunicationRoute
+  AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDepartmentsRoute: typeof AuthenticatedDepartmentsRoute
   AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedFeedbackRoute: typeof AuthenticatedFeedbackRoute
@@ -341,6 +361,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
   AuthenticatedCareRadarRoute: AuthenticatedCareRadarRoute,
   AuthenticatedCommunicationRoute: AuthenticatedCommunicationRoute,
+  AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDepartmentsRoute: AuthenticatedDepartmentsRoute,
   AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedFeedbackRoute: AuthenticatedFeedbackRoute,
