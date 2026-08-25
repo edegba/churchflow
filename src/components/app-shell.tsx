@@ -7,7 +7,6 @@ import { navItems, roleLabels } from "@/lib/nav";
 import { useMembership, useProfile } from "@/hooks/use-organization";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -69,7 +68,7 @@ export function AppShell({
   children,
 }: {
   title: string;
-  description?: string;
+  description?: string | undefined;
   actions?: React.ReactNode;
   children: React.ReactNode;
 }) {
@@ -142,5 +141,3 @@ export function AppShell({
     </div>
   );
 }
-
-export { Badge };
