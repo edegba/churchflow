@@ -10,33 +10,197 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedAttendanceRouteImport } from './routes/_authenticated/attendance'
+import { Route as AuthenticatedCareRadarRouteImport } from './routes/_authenticated/care-radar'
+import { Route as AuthenticatedCommunicationRouteImport } from './routes/_authenticated/communication'
+import { Route as AuthenticatedDepartmentsRouteImport } from './routes/_authenticated/departments'
+import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated/events'
+import { Route as AuthenticatedFeedbackRouteImport } from './routes/_authenticated/feedback'
+import { Route as AuthenticatedFirstTimersRouteImport } from './routes/_authenticated/first-timers'
+import { Route as AuthenticatedFollowUpRouteImport } from './routes/_authenticated/follow-up'
+import { Route as AuthenticatedGroupsRouteImport } from './routes/_authenticated/groups'
+import { Route as AuthenticatedMembersRouteImport } from './routes/_authenticated/members'
+import { Route as AuthenticatedPrayerRequestsRouteImport } from './routes/_authenticated/prayer-requests'
+import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAttendanceRoute = AuthenticatedAttendanceRouteImport.update({
+  id: '/_authenticated/attendance',
+  path: '/attendance',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCareRadarRoute = AuthenticatedCareRadarRouteImport.update({
+  id: '/_authenticated/care-radar',
+  path: '/care-radar',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedCommunicationRoute =
+  AuthenticatedCommunicationRouteImport.update({
+    id: '/_authenticated/communication',
+    path: '/communication',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedDepartmentsRoute =
+  AuthenticatedDepartmentsRouteImport.update({
+    id: '/_authenticated/departments',
+    path: '/departments',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedEventsRoute = AuthenticatedEventsRouteImport.update({
+  id: '/_authenticated/events',
+  path: '/events',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedFeedbackRoute = AuthenticatedFeedbackRouteImport.update({
+  id: '/_authenticated/feedback',
+  path: '/feedback',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedFirstTimersRoute =
+  AuthenticatedFirstTimersRouteImport.update({
+    id: '/_authenticated/first-timers',
+    path: '/first-timers',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedFollowUpRoute = AuthenticatedFollowUpRouteImport.update({
+  id: '/_authenticated/follow-up',
+  path: '/follow-up',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedGroupsRoute = AuthenticatedGroupsRouteImport.update({
+  id: '/_authenticated/groups',
+  path: '/groups',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedMembersRoute = AuthenticatedMembersRouteImport.update({
+  id: '/_authenticated/members',
+  path: '/members',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedPrayerRequestsRoute =
+  AuthenticatedPrayerRequestsRouteImport.update({
+    id: '/_authenticated/prayer-requests',
+    path: '/prayer-requests',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AuthenticatedReportsRoute = AuthenticatedReportsRouteImport.update({
+  id: '/_authenticated/reports',
+  path: '/reports',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/attendance': typeof AuthenticatedAttendanceRoute
+  '/care-radar': typeof AuthenticatedCareRadarRoute
+  '/communication': typeof AuthenticatedCommunicationRoute
+  '/departments': typeof AuthenticatedDepartmentsRoute
+  '/events': typeof AuthenticatedEventsRoute
+  '/feedback': typeof AuthenticatedFeedbackRoute
+  '/first-timers': typeof AuthenticatedFirstTimersRoute
+  '/follow-up': typeof AuthenticatedFollowUpRoute
+  '/groups': typeof AuthenticatedGroupsRoute
+  '/members': typeof AuthenticatedMembersRoute
+  '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
+  '/reports': typeof AuthenticatedReportsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/attendance': typeof AuthenticatedAttendanceRoute
+  '/care-radar': typeof AuthenticatedCareRadarRoute
+  '/communication': typeof AuthenticatedCommunicationRoute
+  '/departments': typeof AuthenticatedDepartmentsRoute
+  '/events': typeof AuthenticatedEventsRoute
+  '/feedback': typeof AuthenticatedFeedbackRoute
+  '/first-timers': typeof AuthenticatedFirstTimersRoute
+  '/follow-up': typeof AuthenticatedFollowUpRoute
+  '/groups': typeof AuthenticatedGroupsRoute
+  '/members': typeof AuthenticatedMembersRoute
+  '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
+  '/reports': typeof AuthenticatedReportsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
+  '/_authenticated/care-radar': typeof AuthenticatedCareRadarRoute
+  '/_authenticated/communication': typeof AuthenticatedCommunicationRoute
+  '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
+  '/_authenticated/events': typeof AuthenticatedEventsRoute
+  '/_authenticated/feedback': typeof AuthenticatedFeedbackRoute
+  '/_authenticated/first-timers': typeof AuthenticatedFirstTimersRoute
+  '/_authenticated/follow-up': typeof AuthenticatedFollowUpRoute
+  '/_authenticated/groups': typeof AuthenticatedGroupsRoute
+  '/_authenticated/members': typeof AuthenticatedMembersRoute
+  '/_authenticated/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
+  '/_authenticated/reports': typeof AuthenticatedReportsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/attendance'
+    | '/care-radar'
+    | '/communication'
+    | '/departments'
+    | '/events'
+    | '/feedback'
+    | '/first-timers'
+    | '/follow-up'
+    | '/groups'
+    | '/members'
+    | '/prayer-requests'
+    | '/reports'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/attendance'
+    | '/care-radar'
+    | '/communication'
+    | '/departments'
+    | '/events'
+    | '/feedback'
+    | '/first-timers'
+    | '/follow-up'
+    | '/groups'
+    | '/members'
+    | '/prayer-requests'
+    | '/reports'
+  id:
+    | '__root__'
+    | '/'
+    | '/_authenticated/attendance'
+    | '/_authenticated/care-radar'
+    | '/_authenticated/communication'
+    | '/_authenticated/departments'
+    | '/_authenticated/events'
+    | '/_authenticated/feedback'
+    | '/_authenticated/first-timers'
+    | '/_authenticated/follow-up'
+    | '/_authenticated/groups'
+    | '/_authenticated/members'
+    | '/_authenticated/prayer-requests'
+    | '/_authenticated/reports'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
+  AuthenticatedCareRadarRoute: typeof AuthenticatedCareRadarRoute
+  AuthenticatedCommunicationRoute: typeof AuthenticatedCommunicationRoute
+  AuthenticatedDepartmentsRoute: typeof AuthenticatedDepartmentsRoute
+  AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
+  AuthenticatedFeedbackRoute: typeof AuthenticatedFeedbackRoute
+  AuthenticatedFirstTimersRoute: typeof AuthenticatedFirstTimersRoute
+  AuthenticatedFollowUpRoute: typeof AuthenticatedFollowUpRoute
+  AuthenticatedGroupsRoute: typeof AuthenticatedGroupsRoute
+  AuthenticatedMembersRoute: typeof AuthenticatedMembersRoute
+  AuthenticatedPrayerRequestsRoute: typeof AuthenticatedPrayerRequestsRoute
+  AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +212,107 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/attendance': {
+      id: '/_authenticated/attendance'
+      path: '/attendance'
+      fullPath: '/attendance'
+      preLoaderRoute: typeof AuthenticatedAttendanceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/care-radar': {
+      id: '/_authenticated/care-radar'
+      path: '/care-radar'
+      fullPath: '/care-radar'
+      preLoaderRoute: typeof AuthenticatedCareRadarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/communication': {
+      id: '/_authenticated/communication'
+      path: '/communication'
+      fullPath: '/communication'
+      preLoaderRoute: typeof AuthenticatedCommunicationRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/departments': {
+      id: '/_authenticated/departments'
+      path: '/departments'
+      fullPath: '/departments'
+      preLoaderRoute: typeof AuthenticatedDepartmentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/events': {
+      id: '/_authenticated/events'
+      path: '/events'
+      fullPath: '/events'
+      preLoaderRoute: typeof AuthenticatedEventsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/feedback': {
+      id: '/_authenticated/feedback'
+      path: '/feedback'
+      fullPath: '/feedback'
+      preLoaderRoute: typeof AuthenticatedFeedbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/first-timers': {
+      id: '/_authenticated/first-timers'
+      path: '/first-timers'
+      fullPath: '/first-timers'
+      preLoaderRoute: typeof AuthenticatedFirstTimersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/follow-up': {
+      id: '/_authenticated/follow-up'
+      path: '/follow-up'
+      fullPath: '/follow-up'
+      preLoaderRoute: typeof AuthenticatedFollowUpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/groups': {
+      id: '/_authenticated/groups'
+      path: '/groups'
+      fullPath: '/groups'
+      preLoaderRoute: typeof AuthenticatedGroupsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/members': {
+      id: '/_authenticated/members'
+      path: '/members'
+      fullPath: '/members'
+      preLoaderRoute: typeof AuthenticatedMembersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/prayer-requests': {
+      id: '/_authenticated/prayer-requests'
+      path: '/prayer-requests'
+      fullPath: '/prayer-requests'
+      preLoaderRoute: typeof AuthenticatedPrayerRequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/reports': {
+      id: '/_authenticated/reports'
+      path: '/reports'
+      fullPath: '/reports'
+      preLoaderRoute: typeof AuthenticatedReportsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
+  AuthenticatedCareRadarRoute: AuthenticatedCareRadarRoute,
+  AuthenticatedCommunicationRoute: AuthenticatedCommunicationRoute,
+  AuthenticatedDepartmentsRoute: AuthenticatedDepartmentsRoute,
+  AuthenticatedEventsRoute: AuthenticatedEventsRoute,
+  AuthenticatedFeedbackRoute: AuthenticatedFeedbackRoute,
+  AuthenticatedFirstTimersRoute: AuthenticatedFirstTimersRoute,
+  AuthenticatedFollowUpRoute: AuthenticatedFollowUpRoute,
+  AuthenticatedGroupsRoute: AuthenticatedGroupsRoute,
+  AuthenticatedMembersRoute: AuthenticatedMembersRoute,
+  AuthenticatedPrayerRequestsRoute: AuthenticatedPrayerRequestsRoute,
+  AuthenticatedReportsRoute: AuthenticatedReportsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
