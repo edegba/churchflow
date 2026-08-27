@@ -14,6 +14,83 @@ export type Database = {
   }
   public: {
     Tables: {
+      members: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string
+          created_by: string | null
+          date_of_birth: string | null
+          email: string | null
+          first_name: string
+          gender: Database["public"]["Enums"]["gender"] | null
+          id: string
+          joined_date: string | null
+          last_name: string
+          marital_status: Database["public"]["Enums"]["marital_status"] | null
+          notes: string | null
+          occupation: string | null
+          organization_id: string
+          phone: string | null
+          photo_url: string | null
+          state: string | null
+          status: Database["public"]["Enums"]["member_status"]
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          first_name: string
+          gender?: Database["public"]["Enums"]["gender"] | null
+          id?: string
+          joined_date?: string | null
+          last_name: string
+          marital_status?: Database["public"]["Enums"]["marital_status"] | null
+          notes?: string | null
+          occupation?: string | null
+          organization_id: string
+          phone?: string | null
+          photo_url?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["member_status"]
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          created_by?: string | null
+          date_of_birth?: string | null
+          email?: string | null
+          first_name?: string
+          gender?: Database["public"]["Enums"]["gender"] | null
+          id?: string
+          joined_date?: string | null
+          last_name?: string
+          marital_status?: Database["public"]["Enums"]["marital_status"] | null
+          notes?: string | null
+          occupation?: string | null
+          organization_id?: string
+          phone?: string | null
+          photo_url?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["member_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "members_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       organization_members: {
         Row: {
           created_at: string
@@ -163,6 +240,14 @@ export type Database = {
         | "department_leader"
         | "group_leader"
         | "finance_officer"
+      gender: "male" | "female" | "other"
+      marital_status: "single" | "married" | "divorced" | "widowed" | "other"
+      member_status:
+        | "visitor"
+        | "first_timer"
+        | "new_member"
+        | "member"
+        | "inactive"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -298,6 +383,15 @@ export const Constants = {
         "department_leader",
         "group_leader",
         "finance_officer",
+      ],
+      gender: ["male", "female", "other"],
+      marital_status: ["single", "married", "divorced", "widowed", "other"],
+      member_status: [
+        "visitor",
+        "first_timer",
+        "new_member",
+        "member",
+        "inactive",
       ],
     },
   },
