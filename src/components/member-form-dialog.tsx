@@ -15,6 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Separator } from "@/components/ui/separator";
 import {
   Select,
   SelectContent,
@@ -26,34 +27,42 @@ import {
 type FormState = {
   first_name: string;
   last_name: string;
-  gender: string;
-  date_of_birth: string;
+  other_name: string;
   phone: string;
   email: string;
+  date_of_birth: string;
+  gender: string;
   address: string;
   city: string;
   state: string;
+  country: string;
   marital_status: string;
   occupation: string;
-  status: MemberStatus;
-  joined_date: string;
+  member_status: MemberStatus;
+  membership_date: string;
+  emergency_contact_name: string;
+  emergency_contact_phone: string;
   notes: string;
 };
 
 const emptyForm: FormState = {
   first_name: "",
   last_name: "",
-  gender: "",
-  date_of_birth: "",
+  other_name: "",
   phone: "",
   email: "",
+  date_of_birth: "",
+  gender: "",
   address: "",
   city: "",
   state: "",
+  country: "Nigeria",
   marital_status: "",
   occupation: "",
-  status: "member",
-  joined_date: "",
+  member_status: "active",
+  membership_date: "",
+  emergency_contact_name: "",
+  emergency_contact_phone: "",
   notes: "",
 };
 
@@ -61,20 +70,26 @@ function toForm(member: Member): FormState {
   return {
     first_name: member.first_name,
     last_name: member.last_name,
-    gender: member.gender ?? "",
-    date_of_birth: member.date_of_birth ?? "",
+    other_name: member.other_name ?? "",
     phone: member.phone ?? "",
     email: member.email ?? "",
+    date_of_birth: member.date_of_birth ?? "",
+    gender: member.gender ?? "",
     address: member.address ?? "",
     city: member.city ?? "",
     state: member.state ?? "",
+    country: member.country,
     marital_status: member.marital_status ?? "",
     occupation: member.occupation ?? "",
-    status: member.status,
-    joined_date: member.joined_date ?? "",
+    member_status: member.member_status,
+    membership_date: member.membership_date ?? "",
+    emergency_contact_name: member.emergency_contact_name ?? "",
+    emergency_contact_phone: member.emergency_contact_phone ?? "",
     notes: member.notes ?? "",
   };
 }
+
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function MemberFormDialog({
   organizationId,
@@ -88,18 +103,42 @@ export function MemberFormDialog({
   onOpenChange: (open: boolean) => void;
 }) {
   const [form, setForm] = useState<FormState>(emptyForm);
+  const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({});
   const save = useSaveMember(organizationId);
 
   useEffect(() => {
-    if (open) setForm(member ? toForm(member) : emptyForm);
+    if (open) {
+      setForm(member ? toForm(member) : emptyForm);
+      setErrors({});
+    }
   }, [open, member]);
 
   function update<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
+    setErrors((e) => ({ ...e, [key]: undefined }));
+  }
+
+  function validate(): boolean {
+    const next: Partial<Record<keyof FormState, string>> = {};
+    if (!form.first_name.trim()) next.first_name = "First name is required";
+    if (!form.last_name.trim()) next.last_name = "Last name is required";
+    if (!form.country.trim()) next.country = "Country is required";
+    if (form.email.trim() && !emailPattern.test(form.email.trim()))
+      next.email = "Enter a valid email address";
+    if (form.phone.trim() && form.phone.trim().length < 7)
+      next.phone = "Enter a valid phone number";
+    setErrors(next);
+    return Object.keys(next).length === 0;
   }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    // Entered values stay in state on failure — nothing is reset here.
+    if (!validate()) {
+      toast.error("Please fix the highlighted fields");
+      return;
+    }
+
     const nullable = (v: string) => (v.trim() === "" ? null : v.trim());
 
     try {
@@ -108,17 +147,21 @@ export function MemberFormDialog({
         values: {
           first_name: form.first_name.trim(),
           last_name: form.last_name.trim(),
-          gender: (nullable(form.gender) as Member["gender"]) ?? null,
-          date_of_birth: nullable(form.date_of_birth),
+          other_name: nullable(form.other_name),
           phone: nullable(form.phone),
           email: nullable(form.email),
+          date_of_birth: nullable(form.date_of_birth),
+          gender: (nullable(form.gender) as Member["gender"]) ?? null,
           address: nullable(form.address),
           city: nullable(form.city),
           state: nullable(form.state),
+          country: form.country.trim(),
           marital_status: (nullable(form.marital_status) as Member["marital_status"]) ?? null,
           occupation: nullable(form.occupation),
-          status: form.status,
-          joined_date: nullable(form.joined_date),
+          member_status: form.member_status,
+          membership_date: nullable(form.membership_date),
+          emergency_contact_name: nullable(form.emergency_contact_name),
+          emergency_contact_phone: nullable(form.emergency_contact_phone),
           notes: nullable(form.notes),
         },
       });
@@ -129,36 +172,69 @@ export function MemberFormDialog({
     }
   }
 
+  function fieldError(key: keyof FormState) {
+    const message = errors[key];
+    if (!message) return null;
+    return (
+      <p className="text-xs text-destructive" role="alert">
+        {message}
+      </p>
+    );
+  }
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
+      <DialogContent className="max-h-[92vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>{member ? "Edit member" : "Add member"}</DialogTitle>
           <DialogDescription>
-            Only the name is required — you can fill in the rest later.
+            First name, last name and country are required. Everything else can be filled in later.
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-5" noValidate>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label htmlFor="first_name">First name</Label>
+              <Label htmlFor="first_name">First name *</Label>
               <Input
                 id="first_name"
-                required
                 value={form.first_name}
                 onChange={(e) => update("first_name", e.target.value)}
+                aria-invalid={Boolean(errors.first_name)}
+              />
+              {fieldError("first_name")}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="last_name">Last name *</Label>
+              <Input
+                id="last_name"
+                value={form.last_name}
+                onChange={(e) => update("last_name", e.target.value)}
+                aria-invalid={Boolean(errors.last_name)}
+              />
+              {fieldError("last_name")}
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="other_name">Other name</Label>
+              <Input
+                id="other_name"
+                value={form.other_name}
+                onChange={(e) => update("other_name", e.target.value)}
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="last_name">Last name</Label>
+              <Label htmlFor="occupation">Occupation</Label>
               <Input
-                id="last_name"
-                required
-                value={form.last_name}
-                onChange={(e) => update("last_name", e.target.value)}
+                id="occupation"
+                value={form.occupation}
+                onChange={(e) => update("occupation", e.target.value)}
               />
             </div>
+          </div>
+
+          <Separator />
+
+          <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="phone">Phone</Label>
               <Input
@@ -167,7 +243,9 @@ export function MemberFormDialog({
                 value={form.phone}
                 onChange={(e) => update("phone", e.target.value)}
                 placeholder="+234 800 000 0000"
+                aria-invalid={Boolean(errors.phone)}
               />
+              {fieldError("phone")}
             </div>
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -176,22 +254,18 @@ export function MemberFormDialog({
                 type="email"
                 value={form.email}
                 onChange={(e) => update("email", e.target.value)}
+                aria-invalid={Boolean(errors.email)}
               />
+              {fieldError("email")}
             </div>
             <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
-              <Select value={form.status} onValueChange={(v) => update("status", v as MemberStatus)}>
-                <SelectTrigger id="status">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(memberStatusLabels).map(([value, label]) => (
-                    <SelectItem key={value} value={value}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Label htmlFor="date_of_birth">Date of birth</Label>
+              <Input
+                id="date_of_birth"
+                type="date"
+                value={form.date_of_birth}
+                onChange={(e) => update("date_of_birth", e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="gender">Gender</Label>
@@ -205,24 +279,6 @@ export function MemberFormDialog({
                   <SelectItem value="other">Other</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="date_of_birth">Date of birth</Label>
-              <Input
-                id="date_of_birth"
-                type="date"
-                value={form.date_of_birth}
-                onChange={(e) => update("date_of_birth", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="joined_date">Joined date</Label>
-              <Input
-                id="joined_date"
-                type="date"
-                value={form.joined_date}
-                onChange={(e) => update("joined_date", e.target.value)}
-              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="marital_status">Marital status</Label>
@@ -243,20 +299,8 @@ export function MemberFormDialog({
               </Select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="occupation">Occupation</Label>
-              <Input
-                id="occupation"
-                value={form.occupation}
-                onChange={(e) => update("occupation", e.target.value)}
-              />
-            </div>
-            <div className="space-y-2">
               <Label htmlFor="city">City</Label>
-              <Input
-                id="city"
-                value={form.city}
-                onChange={(e) => update("city", e.target.value)}
-              />
+              <Input id="city" value={form.city} onChange={(e) => update("city", e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="state">State</Label>
@@ -265,6 +309,16 @@ export function MemberFormDialog({
                 value={form.state}
                 onChange={(e) => update("state", e.target.value)}
               />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="country">Country *</Label>
+              <Input
+                id="country"
+                value={form.country}
+                onChange={(e) => update("country", e.target.value)}
+                aria-invalid={Boolean(errors.country)}
+              />
+              {fieldError("country")}
             </div>
           </div>
 
@@ -276,6 +330,55 @@ export function MemberFormDialog({
               value={form.address}
               onChange={(e) => update("address", e.target.value)}
             />
+          </div>
+
+          <Separator />
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-2">
+              <Label htmlFor="member_status">Member status</Label>
+              <Select
+                value={form.member_status}
+                onValueChange={(v) => update("member_status", v as MemberStatus)}
+              >
+                <SelectTrigger id="member_status">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {Object.entries(memberStatusLabels).map(([value, label]) => (
+                    <SelectItem key={value} value={value}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="membership_date">Membership date</Label>
+              <Input
+                id="membership_date"
+                type="date"
+                value={form.membership_date}
+                onChange={(e) => update("membership_date", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="emergency_contact_name">Emergency contact name</Label>
+              <Input
+                id="emergency_contact_name"
+                value={form.emergency_contact_name}
+                onChange={(e) => update("emergency_contact_name", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="emergency_contact_phone">Emergency contact phone</Label>
+              <Input
+                id="emergency_contact_phone"
+                type="tel"
+                value={form.emergency_contact_phone}
+                onChange={(e) => update("emergency_contact_phone", e.target.value)}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
