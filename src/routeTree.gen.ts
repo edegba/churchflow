@@ -28,6 +28,7 @@ import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authentic
 import { Route as AuthenticatedPrayerRequestsRouteImport } from './routes/_authenticated/prayer-requests'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -127,6 +128,12 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedMembersIndexRoute =
+  AuthenticatedMembersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedMembersRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -142,11 +149,12 @@ export interface FileRoutesByFullPath {
   '/first-timers': typeof AuthenticatedFirstTimersRoute
   '/follow-up': typeof AuthenticatedFollowUpRoute
   '/groups': typeof AuthenticatedGroupsRoute
-  '/members': typeof AuthenticatedMembersRoute
+  '/members': typeof AuthenticatedMembersRouteWithChildren
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/members/': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -162,11 +170,11 @@ export interface FileRoutesByTo {
   '/first-timers': typeof AuthenticatedFirstTimersRoute
   '/follow-up': typeof AuthenticatedFollowUpRoute
   '/groups': typeof AuthenticatedGroupsRoute
-  '/members': typeof AuthenticatedMembersRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/members': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -184,11 +192,12 @@ export interface FileRoutesById {
   '/_authenticated/first-timers': typeof AuthenticatedFirstTimersRoute
   '/_authenticated/follow-up': typeof AuthenticatedFollowUpRoute
   '/_authenticated/groups': typeof AuthenticatedGroupsRoute
-  '/_authenticated/members': typeof AuthenticatedMembersRoute
+  '/_authenticated/members': typeof AuthenticatedMembersRouteWithChildren
   '/_authenticated/onboarding': typeof AuthenticatedOnboardingRoute
   '/_authenticated/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -211,6 +220,7 @@ export interface FileRouteTypes {
     | '/prayer-requests'
     | '/reports'
     | '/settings'
+    | '/members/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -226,11 +236,11 @@ export interface FileRouteTypes {
     | '/first-timers'
     | '/follow-up'
     | '/groups'
-    | '/members'
     | '/onboarding'
     | '/prayer-requests'
     | '/reports'
     | '/settings'
+    | '/members'
   id:
     | '__root__'
     | '/'
@@ -252,6 +262,7 @@ export interface FileRouteTypes {
     | '/_authenticated/prayer-requests'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
+    | '/_authenticated/members/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -396,8 +407,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/members/': {
+      id: '/_authenticated/members/'
+      path: '/'
+      fullPath: '/members/'
+      preLoaderRoute: typeof AuthenticatedMembersIndexRouteImport
+      parentRoute: typeof AuthenticatedMembersRoute
+    }
   }
 }
+
+interface AuthenticatedMembersRouteChildren {
+  AuthenticatedMembersIndexRoute: typeof AuthenticatedMembersIndexRoute
+}
+
+const AuthenticatedMembersRouteChildren: AuthenticatedMembersRouteChildren = {
+  AuthenticatedMembersIndexRoute: AuthenticatedMembersIndexRoute,
+}
+
+const AuthenticatedMembersRouteWithChildren =
+  AuthenticatedMembersRoute._addFileChildren(AuthenticatedMembersRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
@@ -410,7 +439,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFirstTimersRoute: typeof AuthenticatedFirstTimersRoute
   AuthenticatedFollowUpRoute: typeof AuthenticatedFollowUpRoute
   AuthenticatedGroupsRoute: typeof AuthenticatedGroupsRoute
-  AuthenticatedMembersRoute: typeof AuthenticatedMembersRoute
+  AuthenticatedMembersRoute: typeof AuthenticatedMembersRouteWithChildren
   AuthenticatedOnboardingRoute: typeof AuthenticatedOnboardingRoute
   AuthenticatedPrayerRequestsRoute: typeof AuthenticatedPrayerRequestsRoute
   AuthenticatedReportsRoute: typeof AuthenticatedReportsRoute
@@ -428,7 +457,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFirstTimersRoute: AuthenticatedFirstTimersRoute,
   AuthenticatedFollowUpRoute: AuthenticatedFollowUpRoute,
   AuthenticatedGroupsRoute: AuthenticatedGroupsRoute,
-  AuthenticatedMembersRoute: AuthenticatedMembersRoute,
+  AuthenticatedMembersRoute: AuthenticatedMembersRouteWithChildren,
   AuthenticatedOnboardingRoute: AuthenticatedOnboardingRoute,
   AuthenticatedPrayerRequestsRoute: AuthenticatedPrayerRequestsRoute,
   AuthenticatedReportsRoute: AuthenticatedReportsRoute,

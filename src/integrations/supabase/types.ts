@@ -18,67 +18,79 @@ export type Database = {
         Row: {
           address: string | null
           city: string | null
+          country: string
           created_at: string
           created_by: string | null
           date_of_birth: string | null
           email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
           first_name: string
           gender: Database["public"]["Enums"]["gender"] | null
           id: string
-          joined_date: string | null
           last_name: string
           marital_status: Database["public"]["Enums"]["marital_status"] | null
+          member_status: Database["public"]["Enums"]["member_status"]
+          membership_date: string | null
           notes: string | null
           occupation: string | null
           organization_id: string
+          other_name: string | null
           phone: string | null
-          photo_url: string | null
+          profile_photo: string | null
           state: string | null
-          status: Database["public"]["Enums"]["member_status"]
           updated_at: string
         }
         Insert: {
           address?: string | null
           city?: string | null
+          country?: string
           created_at?: string
           created_by?: string | null
           date_of_birth?: string | null
           email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
           first_name: string
           gender?: Database["public"]["Enums"]["gender"] | null
           id?: string
-          joined_date?: string | null
           last_name: string
           marital_status?: Database["public"]["Enums"]["marital_status"] | null
+          member_status?: Database["public"]["Enums"]["member_status"]
+          membership_date?: string | null
           notes?: string | null
           occupation?: string | null
           organization_id: string
+          other_name?: string | null
           phone?: string | null
-          photo_url?: string | null
+          profile_photo?: string | null
           state?: string | null
-          status?: Database["public"]["Enums"]["member_status"]
           updated_at?: string
         }
         Update: {
           address?: string | null
           city?: string | null
+          country?: string
           created_at?: string
           created_by?: string | null
           date_of_birth?: string | null
           email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
           first_name?: string
           gender?: Database["public"]["Enums"]["gender"] | null
           id?: string
-          joined_date?: string | null
           last_name?: string
           marital_status?: Database["public"]["Enums"]["marital_status"] | null
+          member_status?: Database["public"]["Enums"]["member_status"]
+          membership_date?: string | null
           notes?: string | null
           occupation?: string | null
           organization_id?: string
+          other_name?: string | null
           phone?: string | null
-          photo_url?: string | null
+          profile_photo?: string | null
           state?: string | null
-          status?: Database["public"]["Enums"]["member_status"]
           updated_at?: string
         }
         Relationships: [
@@ -243,11 +255,12 @@ export type Database = {
       gender: "male" | "female" | "other"
       marital_status: "single" | "married" | "divorced" | "widowed" | "other"
       member_status:
+        | "active"
+        | "inactive"
+        | "transferred"
+        | "deceased"
         | "visitor"
         | "first_timer"
-        | "new_member"
-        | "member"
-        | "inactive"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -387,11 +400,12 @@ export const Constants = {
       gender: ["male", "female", "other"],
       marital_status: ["single", "married", "divorced", "widowed", "other"],
       member_status: [
+        "active",
+        "inactive",
+        "transferred",
+        "deceased",
         "visitor",
         "first_timer",
-        "new_member",
-        "member",
-        "inactive",
       ],
     },
   },
