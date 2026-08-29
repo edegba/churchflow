@@ -29,6 +29,7 @@ import { Route as AuthenticatedPrayerRequestsRouteImport } from './routes/_authe
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members.index'
+import { Route as AuthenticatedMembersMemberIdRouteImport } from './routes/_authenticated/members.$memberId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -134,6 +135,12 @@ const AuthenticatedMembersIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedMembersRoute,
   } as any)
+const AuthenticatedMembersMemberIdRoute =
+  AuthenticatedMembersMemberIdRouteImport.update({
+    id: '/$memberId',
+    path: '/$memberId',
+    getParentRoute: () => AuthenticatedMembersRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -154,6 +161,7 @@ export interface FileRoutesByFullPath {
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -174,6 +182,7 @@ export interface FileRoutesByTo {
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/members': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRoutesById {
@@ -197,6 +206,7 @@ export interface FileRoutesById {
   '/_authenticated/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRouteTypes {
@@ -220,6 +230,7 @@ export interface FileRouteTypes {
     | '/prayer-requests'
     | '/reports'
     | '/settings'
+    | '/members/$memberId'
     | '/members/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -240,6 +251,7 @@ export interface FileRouteTypes {
     | '/prayer-requests'
     | '/reports'
     | '/settings'
+    | '/members/$memberId'
     | '/members'
   id:
     | '__root__'
@@ -262,6 +274,7 @@ export interface FileRouteTypes {
     | '/_authenticated/prayer-requests'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
+    | '/_authenticated/members/$memberId'
     | '/_authenticated/members/'
   fileRoutesById: FileRoutesById
 }
@@ -414,14 +427,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMembersIndexRouteImport
       parentRoute: typeof AuthenticatedMembersRoute
     }
+    '/_authenticated/members/$memberId': {
+      id: '/_authenticated/members/$memberId'
+      path: '/$memberId'
+      fullPath: '/members/$memberId'
+      preLoaderRoute: typeof AuthenticatedMembersMemberIdRouteImport
+      parentRoute: typeof AuthenticatedMembersRoute
+    }
   }
 }
 
 interface AuthenticatedMembersRouteChildren {
+  AuthenticatedMembersMemberIdRoute: typeof AuthenticatedMembersMemberIdRoute
   AuthenticatedMembersIndexRoute: typeof AuthenticatedMembersIndexRoute
 }
 
 const AuthenticatedMembersRouteChildren: AuthenticatedMembersRouteChildren = {
+  AuthenticatedMembersMemberIdRoute: AuthenticatedMembersMemberIdRoute,
   AuthenticatedMembersIndexRoute: AuthenticatedMembersIndexRoute,
 }
 
