@@ -26,7 +26,7 @@ export type NavItem = {
 export const navItems: NavItem[] = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard, ready: true },
   { label: "Care Radar", to: "/care-radar", icon: Radar, ready: false },
-  { label: "Members", to: "/members", icon: Users, ready: false },
+  { label: "Members", to: "/members", icon: Users, ready: true },
   { label: "First Timers", to: "/first-timers", icon: UserPlus, ready: false },
   { label: "Follow-Up", to: "/follow-up", icon: PhoneCall, ready: false },
   { label: "Attendance", to: "/attendance", icon: CalendarCheck, ready: false },
