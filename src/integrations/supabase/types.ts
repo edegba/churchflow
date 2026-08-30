@@ -14,6 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
+      first_timers: {
+        Row: {
+          address: string | null
+          assigned_to: string | null
+          converted_member_id: string | null
+          converted_to_member: boolean
+          created_at: string
+          created_by: string | null
+          date_of_visit: string
+          email: string | null
+          first_name: string
+          follow_up_status: Database["public"]["Enums"]["follow_up_status"]
+          gender: Database["public"]["Enums"]["gender"] | null
+          how_they_found_us: string | null
+          id: string
+          invited_by: string | null
+          last_name: string
+          notes: string | null
+          organization_id: string
+          phone: string | null
+          service_attended: string | null
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          assigned_to?: string | null
+          converted_member_id?: string | null
+          converted_to_member?: boolean
+          created_at?: string
+          created_by?: string | null
+          date_of_visit?: string
+          email?: string | null
+          first_name: string
+          follow_up_status?: Database["public"]["Enums"]["follow_up_status"]
+          gender?: Database["public"]["Enums"]["gender"] | null
+          how_they_found_us?: string | null
+          id?: string
+          invited_by?: string | null
+          last_name: string
+          notes?: string | null
+          organization_id: string
+          phone?: string | null
+          service_attended?: string | null
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          assigned_to?: string | null
+          converted_member_id?: string | null
+          converted_to_member?: boolean
+          created_at?: string
+          created_by?: string | null
+          date_of_visit?: string
+          email?: string | null
+          first_name?: string
+          follow_up_status?: Database["public"]["Enums"]["follow_up_status"]
+          gender?: Database["public"]["Enums"]["gender"] | null
+          how_they_found_us?: string | null
+          id?: string
+          invited_by?: string | null
+          last_name?: string
+          notes?: string | null
+          organization_id?: string
+          phone?: string | null
+          service_attended?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "first_timers_converted_member_id_fkey"
+            columns: ["converted_member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "first_timers_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       members: {
         Row: {
           address: string | null
@@ -252,6 +336,14 @@ export type Database = {
         | "department_leader"
         | "group_leader"
         | "finance_officer"
+      follow_up_status:
+        | "new"
+        | "contacted"
+        | "responded"
+        | "visited"
+        | "connected"
+        | "converted"
+        | "no_response"
       gender: "male" | "female" | "other"
       marital_status: "single" | "married" | "divorced" | "widowed" | "other"
       member_status:
@@ -396,6 +488,15 @@ export const Constants = {
         "department_leader",
         "group_leader",
         "finance_officer",
+      ],
+      follow_up_status: [
+        "new",
+        "contacted",
+        "responded",
+        "visited",
+        "connected",
+        "converted",
+        "no_response",
       ],
       gender: ["male", "female", "other"],
       marital_status: ["single", "married", "divorced", "widowed", "other"],
