@@ -28,6 +28,7 @@ import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authentic
 import { Route as AuthenticatedPrayerRequestsRouteImport } from './routes/_authenticated/prayer-requests'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedFirstTimersIndexRouteImport } from './routes/_authenticated/first-timers.index'
 import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members.index'
 import { Route as AuthenticatedMembersMemberIdRouteImport } from './routes/_authenticated/members.$memberId'
 
@@ -129,6 +130,12 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedFirstTimersIndexRoute =
+  AuthenticatedFirstTimersIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedFirstTimersRoute,
+  } as any)
 const AuthenticatedMembersIndexRoute =
   AuthenticatedMembersIndexRouteImport.update({
     id: '/',
@@ -153,7 +160,7 @@ export interface FileRoutesByFullPath {
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/events': typeof AuthenticatedEventsRoute
   '/feedback': typeof AuthenticatedFeedbackRoute
-  '/first-timers': typeof AuthenticatedFirstTimersRoute
+  '/first-timers': typeof AuthenticatedFirstTimersRouteWithChildren
   '/follow-up': typeof AuthenticatedFollowUpRoute
   '/groups': typeof AuthenticatedGroupsRoute
   '/members': typeof AuthenticatedMembersRouteWithChildren
@@ -162,6 +169,7 @@ export interface FileRoutesByFullPath {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
+  '/first-timers/': typeof AuthenticatedFirstTimersIndexRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRoutesByTo {
@@ -175,7 +183,6 @@ export interface FileRoutesByTo {
   '/departments': typeof AuthenticatedDepartmentsRoute
   '/events': typeof AuthenticatedEventsRoute
   '/feedback': typeof AuthenticatedFeedbackRoute
-  '/first-timers': typeof AuthenticatedFirstTimersRoute
   '/follow-up': typeof AuthenticatedFollowUpRoute
   '/groups': typeof AuthenticatedGroupsRoute
   '/onboarding': typeof AuthenticatedOnboardingRoute
@@ -183,6 +190,7 @@ export interface FileRoutesByTo {
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
+  '/first-timers': typeof AuthenticatedFirstTimersIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRoutesById {
@@ -198,7 +206,7 @@ export interface FileRoutesById {
   '/_authenticated/departments': typeof AuthenticatedDepartmentsRoute
   '/_authenticated/events': typeof AuthenticatedEventsRoute
   '/_authenticated/feedback': typeof AuthenticatedFeedbackRoute
-  '/_authenticated/first-timers': typeof AuthenticatedFirstTimersRoute
+  '/_authenticated/first-timers': typeof AuthenticatedFirstTimersRouteWithChildren
   '/_authenticated/follow-up': typeof AuthenticatedFollowUpRoute
   '/_authenticated/groups': typeof AuthenticatedGroupsRoute
   '/_authenticated/members': typeof AuthenticatedMembersRouteWithChildren
@@ -207,6 +215,7 @@ export interface FileRoutesById {
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
+  '/_authenticated/first-timers/': typeof AuthenticatedFirstTimersIndexRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
 }
 export interface FileRouteTypes {
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/members/$memberId'
+    | '/first-timers/'
     | '/members/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -244,7 +254,6 @@ export interface FileRouteTypes {
     | '/departments'
     | '/events'
     | '/feedback'
-    | '/first-timers'
     | '/follow-up'
     | '/groups'
     | '/onboarding'
@@ -252,6 +261,7 @@ export interface FileRouteTypes {
     | '/reports'
     | '/settings'
     | '/members/$memberId'
+    | '/first-timers'
     | '/members'
   id:
     | '__root__'
@@ -275,6 +285,7 @@ export interface FileRouteTypes {
     | '/_authenticated/reports'
     | '/_authenticated/settings'
     | '/_authenticated/members/$memberId'
+    | '/_authenticated/first-timers/'
     | '/_authenticated/members/'
   fileRoutesById: FileRoutesById
 }
@@ -420,6 +431,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/first-timers/': {
+      id: '/_authenticated/first-timers/'
+      path: '/'
+      fullPath: '/first-timers/'
+      preLoaderRoute: typeof AuthenticatedFirstTimersIndexRouteImport
+      parentRoute: typeof AuthenticatedFirstTimersRoute
+    }
     '/_authenticated/members/': {
       id: '/_authenticated/members/'
       path: '/'
@@ -436,6 +454,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedFirstTimersRouteChildren {
+  AuthenticatedFirstTimersIndexRoute: typeof AuthenticatedFirstTimersIndexRoute
+}
+
+const AuthenticatedFirstTimersRouteChildren: AuthenticatedFirstTimersRouteChildren =
+  {
+    AuthenticatedFirstTimersIndexRoute: AuthenticatedFirstTimersIndexRoute,
+  }
+
+const AuthenticatedFirstTimersRouteWithChildren =
+  AuthenticatedFirstTimersRoute._addFileChildren(
+    AuthenticatedFirstTimersRouteChildren,
+  )
 
 interface AuthenticatedMembersRouteChildren {
   AuthenticatedMembersMemberIdRoute: typeof AuthenticatedMembersMemberIdRoute
@@ -458,7 +490,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDepartmentsRoute: typeof AuthenticatedDepartmentsRoute
   AuthenticatedEventsRoute: typeof AuthenticatedEventsRoute
   AuthenticatedFeedbackRoute: typeof AuthenticatedFeedbackRoute
-  AuthenticatedFirstTimersRoute: typeof AuthenticatedFirstTimersRoute
+  AuthenticatedFirstTimersRoute: typeof AuthenticatedFirstTimersRouteWithChildren
   AuthenticatedFollowUpRoute: typeof AuthenticatedFollowUpRoute
   AuthenticatedGroupsRoute: typeof AuthenticatedGroupsRoute
   AuthenticatedMembersRoute: typeof AuthenticatedMembersRouteWithChildren
@@ -476,7 +508,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDepartmentsRoute: AuthenticatedDepartmentsRoute,
   AuthenticatedEventsRoute: AuthenticatedEventsRoute,
   AuthenticatedFeedbackRoute: AuthenticatedFeedbackRoute,
-  AuthenticatedFirstTimersRoute: AuthenticatedFirstTimersRoute,
+  AuthenticatedFirstTimersRoute: AuthenticatedFirstTimersRouteWithChildren,
   AuthenticatedFollowUpRoute: AuthenticatedFollowUpRoute,
   AuthenticatedGroupsRoute: AuthenticatedGroupsRoute,
   AuthenticatedMembersRoute: AuthenticatedMembersRouteWithChildren,
