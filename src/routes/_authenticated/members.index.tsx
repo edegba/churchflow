@@ -105,12 +105,12 @@ function StatCard({
 }) {
   return (
     <Card>
-      <CardContent className="flex items-center gap-3 py-4">
+      <CardContent className="flex items-start gap-3 py-4">
         <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-muted-foreground">
           <Icon className="size-4" aria-hidden="true" />
         </span>
         <div className="min-w-0">
-          <p className="truncate text-xs text-muted-foreground">{label}</p>
+          <p className="text-xs leading-snug text-muted-foreground">{label}</p>
           {value === null ? (
             <Skeleton className="mt-1 h-5 w-10" />
           ) : (

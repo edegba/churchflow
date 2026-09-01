@@ -29,6 +29,7 @@ import { Route as AuthenticatedPrayerRequestsRouteImport } from './routes/_authe
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedFirstTimersIndexRouteImport } from './routes/_authenticated/first-timers.index'
+import { Route as AuthenticatedFirstTimersFirstTimerIdRouteImport } from './routes/_authenticated/first-timers.$firstTimerId'
 import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members.index'
 import { Route as AuthenticatedMembersMemberIdRouteImport } from './routes/_authenticated/members.$memberId'
 
@@ -136,6 +137,12 @@ const AuthenticatedFirstTimersIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedFirstTimersRoute,
   } as any)
+const AuthenticatedFirstTimersFirstTimerIdRoute =
+  AuthenticatedFirstTimersFirstTimerIdRouteImport.update({
+    id: '/$firstTimerId',
+    path: '/$firstTimerId',
+    getParentRoute: () => AuthenticatedFirstTimersRoute,
+  } as any)
 const AuthenticatedMembersIndexRoute =
   AuthenticatedMembersIndexRouteImport.update({
     id: '/',
@@ -168,6 +175,7 @@ export interface FileRoutesByFullPath {
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/first-timers/': typeof AuthenticatedFirstTimersIndexRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
@@ -189,6 +197,7 @@ export interface FileRoutesByTo {
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/first-timers': typeof AuthenticatedFirstTimersIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
@@ -214,6 +223,7 @@ export interface FileRoutesById {
   '/_authenticated/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/_authenticated/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/_authenticated/first-timers/': typeof AuthenticatedFirstTimersIndexRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
@@ -239,6 +249,7 @@ export interface FileRouteTypes {
     | '/prayer-requests'
     | '/reports'
     | '/settings'
+    | '/first-timers/$firstTimerId'
     | '/members/$memberId'
     | '/first-timers/'
     | '/members/'
@@ -260,6 +271,7 @@ export interface FileRouteTypes {
     | '/prayer-requests'
     | '/reports'
     | '/settings'
+    | '/first-timers/$firstTimerId'
     | '/members/$memberId'
     | '/first-timers'
     | '/members'
@@ -284,6 +296,7 @@ export interface FileRouteTypes {
     | '/_authenticated/prayer-requests'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
+    | '/_authenticated/first-timers/$firstTimerId'
     | '/_authenticated/members/$memberId'
     | '/_authenticated/first-timers/'
     | '/_authenticated/members/'
@@ -438,6 +451,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedFirstTimersIndexRouteImport
       parentRoute: typeof AuthenticatedFirstTimersRoute
     }
+    '/_authenticated/first-timers/$firstTimerId': {
+      id: '/_authenticated/first-timers/$firstTimerId'
+      path: '/$firstTimerId'
+      fullPath: '/first-timers/$firstTimerId'
+      preLoaderRoute: typeof AuthenticatedFirstTimersFirstTimerIdRouteImport
+      parentRoute: typeof AuthenticatedFirstTimersRoute
+    }
     '/_authenticated/members/': {
       id: '/_authenticated/members/'
       path: '/'
@@ -456,11 +476,14 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedFirstTimersRouteChildren {
+  AuthenticatedFirstTimersFirstTimerIdRoute: typeof AuthenticatedFirstTimersFirstTimerIdRoute
   AuthenticatedFirstTimersIndexRoute: typeof AuthenticatedFirstTimersIndexRoute
 }
 
 const AuthenticatedFirstTimersRouteChildren: AuthenticatedFirstTimersRouteChildren =
   {
+    AuthenticatedFirstTimersFirstTimerIdRoute:
+      AuthenticatedFirstTimersFirstTimerIdRoute,
     AuthenticatedFirstTimersIndexRoute: AuthenticatedFirstTimersIndexRoute,
   }
 
