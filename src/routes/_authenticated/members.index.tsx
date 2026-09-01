@@ -237,10 +237,10 @@ function MembersPage() {
       }
     >
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <StatCard icon={Users} label="Total members" value={stats?.total ?? null} />
-        <StatCard icon={UserCheck} label="Active" value={stats?.active ?? null} />
-        <StatCard icon={UserPlus} label="New (30 days)" value={stats?.recent ?? null} />
-        <StatCard icon={UserMinus} label="Inactive" value={stats?.inactive ?? null} />
+        <StatCard icon={Users} label="Total Members" value={stats?.total ?? null} />
+        <StatCard icon={UserCheck} label="Active Members" value={stats?.active ?? null} />
+        <StatCard icon={UserPlus} label="New Members (30 days)" value={stats?.recent ?? null} />
+        <StatCard icon={UserMinus} label="Inactive Members" value={stats?.inactive ?? null} />
       </div>
 
       <Card>
@@ -259,96 +259,114 @@ function MembersPage() {
             />
           </div>
 
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Status</Label>
-              <Select value={status} onValueChange={(v) => setStatus(v as typeof status)}>
-                <SelectTrigger aria-label="Filter by status">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All statuses</SelectItem>
-                  {Object.entries(memberStatusLabels).map(([value, label]) => (
-                    <SelectItem key={value} value={value}>
-                      {label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <Collapsible open={filtersOpen} onOpenChange={setFiltersOpen}>
+            <div className="flex flex-wrap items-center gap-2">
+              <CollapsibleTrigger asChild>
+                <Button variant="outline" size="sm">
+                  <SlidersHorizontal className="size-4" aria-hidden="true" />
+                  Filters
+                  {activeFilterCount > 0 ? (
+                    <Badge variant="secondary" className="ml-1">
+                      {activeFilterCount}
+                    </Badge>
+                  ) : null}
+                </Button>
+              </CollapsibleTrigger>
+              {filtersActive ? (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    setSearch("");
+                    setStatus("all");
+                    setGender("all");
+                    setJoinedFrom("");
+                    setJoinedTo("");
+                    setSort("name_asc");
+                  }}
+                >
+                  Clear filters
+                </Button>
+              ) : null}
             </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Gender</Label>
-              <Select value={gender} onValueChange={(v) => setGender(v as typeof gender)}>
-                <SelectTrigger aria-label="Filter by gender">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">All genders</SelectItem>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <CollapsibleContent className="pt-3">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">Status</Label>
+                  <Select value={status} onValueChange={(v) => setStatus(v as typeof status)}>
+                    <SelectTrigger aria-label="Filter by status">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All statuses</SelectItem>
+                      {Object.entries(memberStatusLabels).map(([value, label]) => (
+                        <SelectItem key={value} value={value}>
+                          {label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="joined_from" className="text-xs text-muted-foreground">
-                Joined from
-              </Label>
-              <Input
-                id="joined_from"
-                type="date"
-                value={joinedFrom}
-                onChange={(e) => setJoinedFrom(e.target.value)}
-              />
-            </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">Gender</Label>
+                  <Select value={gender} onValueChange={(v) => setGender(v as typeof gender)}>
+                    <SelectTrigger aria-label="Filter by gender">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All genders</SelectItem>
+                      <SelectItem value="male">Male</SelectItem>
+                      <SelectItem value="female">Female</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
 
-            <div className="space-y-1.5">
-              <Label htmlFor="joined_to" className="text-xs text-muted-foreground">
-                Joined to
-              </Label>
-              <Input
-                id="joined_to"
-                type="date"
-                value={joinedTo}
-                onChange={(e) => setJoinedTo(e.target.value)}
-              />
-            </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="joined_from" className="text-xs text-muted-foreground">
+                    Joined from
+                  </Label>
+                  <Input
+                    id="joined_from"
+                    type="date"
+                    value={joinedFrom}
+                    onChange={(e) => setJoinedFrom(e.target.value)}
+                  />
+                </div>
 
-            <div className="space-y-1.5">
-              <Label className="text-xs text-muted-foreground">Sort</Label>
-              <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
-                <SelectTrigger aria-label="Sort members">
-                  <ArrowUpDown className="size-3.5 text-muted-foreground" aria-hidden="true" />
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="name_asc">Name A–Z</SelectItem>
-                  <SelectItem value="name_desc">Name Z–A</SelectItem>
-                  <SelectItem value="newest">Recently added</SelectItem>
-                  <SelectItem value="oldest">Oldest added</SelectItem>
-                  <SelectItem value="membership_recent">Newest membership date</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+                <div className="space-y-1.5">
+                  <Label htmlFor="joined_to" className="text-xs text-muted-foreground">
+                    Joined to
+                  </Label>
+                  <Input
+                    id="joined_to"
+                    type="date"
+                    value={joinedTo}
+                    onChange={(e) => setJoinedTo(e.target.value)}
+                  />
+                </div>
 
-          {filtersActive ? (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setSearch("");
-                setStatus("all");
-                setGender("all");
-                setJoinedFrom("");
-                setJoinedTo("");
-              }}
-            >
-              Clear filters
-            </Button>
-          ) : null}
+                <div className="space-y-1.5">
+                  <Label className="text-xs text-muted-foreground">Sort</Label>
+                  <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+                    <SelectTrigger aria-label="Sort members">
+                      <ArrowUpDown className="size-3.5 text-muted-foreground" aria-hidden="true" />
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="name_asc">Name A–Z</SelectItem>
+                      <SelectItem value="name_desc">Name Z–A</SelectItem>
+                      <SelectItem value="newest">Recently added</SelectItem>
+                      <SelectItem value="oldest">Oldest added</SelectItem>
+                      <SelectItem value="membership_recent">Newest membership date</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            </CollapsibleContent>
+          </Collapsible>
         </CardContent>
       </Card>
 
