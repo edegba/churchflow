@@ -139,6 +139,7 @@ function MembersPage() {
   const [joinedTo, setJoinedTo] = useState("");
   const [sort, setSort] = useState<SortKey>("name_asc");
   const [page, setPage] = useState(1);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Member | null>(null);
@@ -218,12 +219,14 @@ function MembersPage() {
     }
   }
 
-  const filtersActive =
-    Boolean(search.trim()) ||
-    status !== "all" ||
-    gender !== "all" ||
-    Boolean(joinedFrom) ||
-    Boolean(joinedTo);
+  const activeFilterCount =
+    (status !== "all" ? 1 : 0) +
+    (gender !== "all" ? 1 : 0) +
+    (joinedFrom ? 1 : 0) +
+    (joinedTo ? 1 : 0) +
+    (sort !== "name_asc" ? 1 : 0);
+
+  const filtersActive = Boolean(search.trim()) || activeFilterCount > 0;
 
   return (
     <AppShell
