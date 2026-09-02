@@ -14,6 +14,120 @@ export type Database = {
   }
   public: {
     Tables: {
+      attendance_events: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          description: string | null
+          end_time: string | null
+          event_date: string
+          event_type: Database["public"]["Enums"]["attendance_event_type"]
+          id: string
+          location: string | null
+          name: string
+          organization_id: string
+          start_time: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_time?: string | null
+          event_date?: string
+          event_type?: Database["public"]["Enums"]["attendance_event_type"]
+          id?: string
+          location?: string | null
+          name: string
+          organization_id: string
+          start_time?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          end_time?: string | null
+          event_date?: string
+          event_type?: Database["public"]["Enums"]["attendance_event_type"]
+          id?: string
+          location?: string | null
+          name?: string
+          organization_id?: string
+          start_time?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      attendance_records: {
+        Row: {
+          attendance_event_id: string
+          attendance_status: Database["public"]["Enums"]["attendance_status"]
+          check_in_time: string | null
+          created_at: string
+          id: string
+          member_id: string
+          notes: string | null
+          organization_id: string
+          recorded_by: string | null
+          updated_at: string
+        }
+        Insert: {
+          attendance_event_id: string
+          attendance_status?: Database["public"]["Enums"]["attendance_status"]
+          check_in_time?: string | null
+          created_at?: string
+          id?: string
+          member_id: string
+          notes?: string | null
+          organization_id: string
+          recorded_by?: string | null
+          updated_at?: string
+        }
+        Update: {
+          attendance_event_id?: string
+          attendance_status?: Database["public"]["Enums"]["attendance_status"]
+          check_in_time?: string | null
+          created_at?: string
+          id?: string
+          member_id?: string
+          notes?: string | null
+          organization_id?: string
+          recorded_by?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_records_attendance_event_id_fkey"
+            columns: ["attendance_event_id"]
+            isOneToOne: false
+            referencedRelation: "attendance_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_records_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       first_timers: {
         Row: {
           address: string | null
@@ -326,6 +440,22 @@ export type Database = {
       }
       is_org_admin: { Args: { _org_id: string }; Returns: boolean }
       is_org_member: { Args: { _org_id: string }; Returns: boolean }
+      member_attendance_signals: {
+        Args: {
+          _event_type?: Database["public"]["Enums"]["attendance_event_type"]
+          _lookback?: number
+          _org_id: string
+        }
+        Returns: {
+          attendance_rate: number
+          attended: number
+          consecutive_absences: number
+          events_considered: number
+          last_attended_on: string
+          member_id: string
+          missed: number
+        }[]
+      }
     }
     Enums: {
       app_role:
@@ -336,6 +466,15 @@ export type Database = {
         | "department_leader"
         | "group_leader"
         | "finance_officer"
+      attendance_event_type:
+        | "sunday_service"
+        | "bible_study"
+        | "midweek_service"
+        | "youth_service"
+        | "cell_group"
+        | "special_event"
+        | "other"
+      attendance_status: "present" | "absent" | "excused"
       follow_up_status:
         | "new"
         | "contacted"
@@ -489,6 +628,16 @@ export const Constants = {
         "group_leader",
         "finance_officer",
       ],
+      attendance_event_type: [
+        "sunday_service",
+        "bible_study",
+        "midweek_service",
+        "youth_service",
+        "cell_group",
+        "special_event",
+        "other",
+      ],
+      attendance_status: ["present", "absent", "excused"],
       follow_up_status: [
         "new",
         "contacted",
