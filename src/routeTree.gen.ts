@@ -28,6 +28,7 @@ import { Route as AuthenticatedOnboardingRouteImport } from './routes/_authentic
 import { Route as AuthenticatedPrayerRequestsRouteImport } from './routes/_authenticated/prayer-requests'
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
+import { Route as AuthenticatedAttendanceIndexRouteImport } from './routes/_authenticated/attendance.index'
 import { Route as AuthenticatedFirstTimersIndexRouteImport } from './routes/_authenticated/first-timers.index'
 import { Route as AuthenticatedFirstTimersFirstTimerIdRouteImport } from './routes/_authenticated/first-timers.$firstTimerId'
 import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members.index'
@@ -131,6 +132,12 @@ const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAttendanceIndexRoute =
+  AuthenticatedAttendanceIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAttendanceRoute,
+  } as any)
 const AuthenticatedFirstTimersIndexRoute =
   AuthenticatedFirstTimersIndexRouteImport.update({
     id: '/',
@@ -160,7 +167,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/attendance': typeof AuthenticatedAttendanceRoute
+  '/attendance': typeof AuthenticatedAttendanceRouteWithChildren
   '/care-radar': typeof AuthenticatedCareRadarRoute
   '/communication': typeof AuthenticatedCommunicationRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -177,6 +184,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRoute
   '/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
+  '/attendance/': typeof AuthenticatedAttendanceIndexRoute
   '/first-timers/': typeof AuthenticatedFirstTimersIndexRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
 }
@@ -184,7 +192,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/attendance': typeof AuthenticatedAttendanceRoute
   '/care-radar': typeof AuthenticatedCareRadarRoute
   '/communication': typeof AuthenticatedCommunicationRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -199,6 +206,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRoute
   '/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
+  '/attendance': typeof AuthenticatedAttendanceIndexRoute
   '/first-timers': typeof AuthenticatedFirstTimersIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
 }
@@ -208,7 +216,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
   '/reset-password': typeof ResetPasswordRoute
-  '/_authenticated/attendance': typeof AuthenticatedAttendanceRoute
+  '/_authenticated/attendance': typeof AuthenticatedAttendanceRouteWithChildren
   '/_authenticated/care-radar': typeof AuthenticatedCareRadarRoute
   '/_authenticated/communication': typeof AuthenticatedCommunicationRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/_authenticated/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
+  '/_authenticated/attendance/': typeof AuthenticatedAttendanceIndexRoute
   '/_authenticated/first-timers/': typeof AuthenticatedFirstTimersIndexRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
 }
@@ -251,6 +260,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/first-timers/$firstTimerId'
     | '/members/$memberId'
+    | '/attendance/'
     | '/first-timers/'
     | '/members/'
   fileRoutesByTo: FileRoutesByTo
@@ -258,7 +268,6 @@ export interface FileRouteTypes {
     | '/'
     | '/auth'
     | '/reset-password'
-    | '/attendance'
     | '/care-radar'
     | '/communication'
     | '/dashboard'
@@ -273,6 +282,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/first-timers/$firstTimerId'
     | '/members/$memberId'
+    | '/attendance'
     | '/first-timers'
     | '/members'
   id:
@@ -298,6 +308,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/_authenticated/first-timers/$firstTimerId'
     | '/_authenticated/members/$memberId'
+    | '/_authenticated/attendance/'
     | '/_authenticated/first-timers/'
     | '/_authenticated/members/'
   fileRoutesById: FileRoutesById
@@ -444,6 +455,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSettingsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/attendance/': {
+      id: '/_authenticated/attendance/'
+      path: '/'
+      fullPath: '/attendance/'
+      preLoaderRoute: typeof AuthenticatedAttendanceIndexRouteImport
+      parentRoute: typeof AuthenticatedAttendanceRoute
+    }
     '/_authenticated/first-timers/': {
       id: '/_authenticated/first-timers/'
       path: '/'
@@ -474,6 +492,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AuthenticatedAttendanceRouteChildren {
+  AuthenticatedAttendanceIndexRoute: typeof AuthenticatedAttendanceIndexRoute
+}
+
+const AuthenticatedAttendanceRouteChildren: AuthenticatedAttendanceRouteChildren =
+  {
+    AuthenticatedAttendanceIndexRoute: AuthenticatedAttendanceIndexRoute,
+  }
+
+const AuthenticatedAttendanceRouteWithChildren =
+  AuthenticatedAttendanceRoute._addFileChildren(
+    AuthenticatedAttendanceRouteChildren,
+  )
 
 interface AuthenticatedFirstTimersRouteChildren {
   AuthenticatedFirstTimersFirstTimerIdRoute: typeof AuthenticatedFirstTimersFirstTimerIdRoute
@@ -506,7 +538,7 @@ const AuthenticatedMembersRouteWithChildren =
   AuthenticatedMembersRoute._addFileChildren(AuthenticatedMembersRouteChildren)
 
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRoute
+  AuthenticatedAttendanceRoute: typeof AuthenticatedAttendanceRouteWithChildren
   AuthenticatedCareRadarRoute: typeof AuthenticatedCareRadarRoute
   AuthenticatedCommunicationRoute: typeof AuthenticatedCommunicationRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
@@ -524,7 +556,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAttendanceRoute: AuthenticatedAttendanceRoute,
+  AuthenticatedAttendanceRoute: AuthenticatedAttendanceRouteWithChildren,
   AuthenticatedCareRadarRoute: AuthenticatedCareRadarRoute,
   AuthenticatedCommunicationRoute: AuthenticatedCommunicationRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
