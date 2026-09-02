@@ -279,7 +279,6 @@ export function useAttendanceSignals(
   });
 }
 
-const STAFF_ROLES = ["super_admin", "church_admin", "pastor", "follow_up_officer"];
 const MANAGE_ROLES = ["super_admin", "church_admin", "pastor"];
 const ADMIN_ROLES = ["super_admin", "church_admin"];
 
@@ -288,7 +287,7 @@ export function attendancePermissions(role: string | undefined) {
     /** Department/group leaders can only view; finance officers have no access. */
     canView: Boolean(role) && role !== "finance_officer",
     canCreateEvent: role ? MANAGE_ROLES.includes(role) : false,
-    canRecord: role ? STAFF_ROLES.includes(role) : false,
+    canRecord: role ? MANAGE_ROLES.includes(role) : false,
     canEditEvent: role ? MANAGE_ROLES.includes(role) : false,
     canDeleteEvent: role ? ADMIN_ROLES.includes(role) : false,
   };
