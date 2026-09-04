@@ -39,7 +39,6 @@ import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/attendance/$eventId")({
   head: () => ({
@@ -455,5 +454,3 @@ function AttendanceEventPage() {
     </AppShell>
   );
 }
-
-export const _unused = cn;

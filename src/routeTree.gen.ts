@@ -29,6 +29,7 @@ import { Route as AuthenticatedPrayerRequestsRouteImport } from './routes/_authe
 import { Route as AuthenticatedReportsRouteImport } from './routes/_authenticated/reports'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedAttendanceIndexRouteImport } from './routes/_authenticated/attendance.index'
+import { Route as AuthenticatedAttendanceEventIdRouteImport } from './routes/_authenticated/attendance.$eventId'
 import { Route as AuthenticatedFirstTimersIndexRouteImport } from './routes/_authenticated/first-timers.index'
 import { Route as AuthenticatedFirstTimersFirstTimerIdRouteImport } from './routes/_authenticated/first-timers.$firstTimerId'
 import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members.index'
@@ -138,6 +139,12 @@ const AuthenticatedAttendanceIndexRoute =
     path: '/',
     getParentRoute: () => AuthenticatedAttendanceRoute,
   } as any)
+const AuthenticatedAttendanceEventIdRoute =
+  AuthenticatedAttendanceEventIdRouteImport.update({
+    id: '/$eventId',
+    path: '/$eventId',
+    getParentRoute: () => AuthenticatedAttendanceRoute,
+  } as any)
 const AuthenticatedFirstTimersIndexRoute =
   AuthenticatedFirstTimersIndexRouteImport.update({
     id: '/',
@@ -182,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/attendance/$eventId': typeof AuthenticatedAttendanceEventIdRoute
   '/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/attendance/': typeof AuthenticatedAttendanceIndexRoute
@@ -204,6 +212,7 @@ export interface FileRoutesByTo {
   '/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/reports': typeof AuthenticatedReportsRoute
   '/settings': typeof AuthenticatedSettingsRoute
+  '/attendance/$eventId': typeof AuthenticatedAttendanceEventIdRoute
   '/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/attendance': typeof AuthenticatedAttendanceIndexRoute
@@ -231,6 +240,7 @@ export interface FileRoutesById {
   '/_authenticated/prayer-requests': typeof AuthenticatedPrayerRequestsRoute
   '/_authenticated/reports': typeof AuthenticatedReportsRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
+  '/_authenticated/attendance/$eventId': typeof AuthenticatedAttendanceEventIdRoute
   '/_authenticated/first-timers/$firstTimerId': typeof AuthenticatedFirstTimersFirstTimerIdRoute
   '/_authenticated/members/$memberId': typeof AuthenticatedMembersMemberIdRoute
   '/_authenticated/attendance/': typeof AuthenticatedAttendanceIndexRoute
@@ -258,6 +268,7 @@ export interface FileRouteTypes {
     | '/prayer-requests'
     | '/reports'
     | '/settings'
+    | '/attendance/$eventId'
     | '/first-timers/$firstTimerId'
     | '/members/$memberId'
     | '/attendance/'
@@ -280,6 +291,7 @@ export interface FileRouteTypes {
     | '/prayer-requests'
     | '/reports'
     | '/settings'
+    | '/attendance/$eventId'
     | '/first-timers/$firstTimerId'
     | '/members/$memberId'
     | '/attendance'
@@ -306,6 +318,7 @@ export interface FileRouteTypes {
     | '/_authenticated/prayer-requests'
     | '/_authenticated/reports'
     | '/_authenticated/settings'
+    | '/_authenticated/attendance/$eventId'
     | '/_authenticated/first-timers/$firstTimerId'
     | '/_authenticated/members/$memberId'
     | '/_authenticated/attendance/'
@@ -462,6 +475,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAttendanceIndexRouteImport
       parentRoute: typeof AuthenticatedAttendanceRoute
     }
+    '/_authenticated/attendance/$eventId': {
+      id: '/_authenticated/attendance/$eventId'
+      path: '/$eventId'
+      fullPath: '/attendance/$eventId'
+      preLoaderRoute: typeof AuthenticatedAttendanceEventIdRouteImport
+      parentRoute: typeof AuthenticatedAttendanceRoute
+    }
     '/_authenticated/first-timers/': {
       id: '/_authenticated/first-timers/'
       path: '/'
@@ -494,11 +514,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface AuthenticatedAttendanceRouteChildren {
+  AuthenticatedAttendanceEventIdRoute: typeof AuthenticatedAttendanceEventIdRoute
   AuthenticatedAttendanceIndexRoute: typeof AuthenticatedAttendanceIndexRoute
 }
 
 const AuthenticatedAttendanceRouteChildren: AuthenticatedAttendanceRouteChildren =
   {
+    AuthenticatedAttendanceEventIdRoute: AuthenticatedAttendanceEventIdRoute,
     AuthenticatedAttendanceIndexRoute: AuthenticatedAttendanceIndexRoute,
   }
 
