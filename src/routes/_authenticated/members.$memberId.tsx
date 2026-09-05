@@ -224,11 +224,7 @@ function MemberProfilePage() {
         </TabsContent>
 
         <TabsContent value="attendance" className="mt-4">
-          <EmptyState
-            icon={CalendarCheck}
-            title="Attendance is coming in the next module"
-            description="Once attendance tracking is enabled, every service this member attends will appear here."
-          />
+          <MemberAttendancePanel memberId={member.id} />
         </TabsContent>
 
         <TabsContent value="follow-up" className="mt-4">

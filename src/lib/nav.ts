@@ -29,7 +29,7 @@ export const navItems: NavItem[] = [
   { label: "Members", to: "/members", icon: Users, ready: true },
   { label: "First Timers", to: "/first-timers", icon: UserPlus, ready: true },
   { label: "Follow-Up", to: "/follow-up", icon: PhoneCall, ready: false },
-  { label: "Attendance", to: "/attendance", icon: CalendarCheck, ready: false },
+  { label: "Attendance", to: "/attendance", icon: CalendarCheck, ready: true },
   { label: "Groups", to: "/groups", icon: Network, ready: false },
   { label: "Departments", to: "/departments", icon: Building2, ready: false },
   { label: "Prayer Requests", to: "/prayer-requests", icon: HandHeart, ready: false },
