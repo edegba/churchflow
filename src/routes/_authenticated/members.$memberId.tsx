@@ -25,6 +25,7 @@ import {
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/empty-state";
 import { MemberFormDialog } from "@/components/member-form-dialog";
+import { MemberAttendancePanel } from "@/components/member-attendance-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -224,11 +225,7 @@ function MemberProfilePage() {
         </TabsContent>
 
         <TabsContent value="attendance" className="mt-4">
-          <EmptyState
-            icon={CalendarCheck}
-            title="Attendance is coming in the next module"
-            description="Once attendance tracking is enabled, every service this member attends will appear here."
-          />
+          <MemberAttendancePanel memberId={member.id} />
         </TabsContent>
 
         <TabsContent value="follow-up" className="mt-4">

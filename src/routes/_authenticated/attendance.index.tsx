@@ -179,6 +179,7 @@ function AttendancePage() {
         perms.canCreateEvent ? (
           <Button
             size="sm"
+            aria-label="Create event"
             onClick={() => {
               setEditing(null);
               setDialogOpen(true);

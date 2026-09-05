@@ -302,8 +302,8 @@ function AttendanceEventPage() {
             </div>
 
             <div className="flex flex-wrap items-center gap-2">
-              <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
-                <TabsList className="flex-wrap">
+              <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)} className="w-full sm:w-auto">
+                <TabsList className="h-auto w-full flex-wrap justify-start gap-1 sm:w-auto">
                   <TabsTrigger value="all">All</TabsTrigger>
                   <TabsTrigger value="present">Present</TabsTrigger>
                   <TabsTrigger value="absent">Absent</TabsTrigger>
