@@ -25,6 +25,7 @@ import {
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/empty-state";
 import { MemberFormDialog } from "@/components/member-form-dialog";
+import { MemberAttendancePanel } from "@/components/member-attendance-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
