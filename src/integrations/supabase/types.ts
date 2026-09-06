@@ -212,6 +212,85 @@ export type Database = {
           },
         ]
       }
+      follow_up_tasks: {
+        Row: {
+          assigned_to: string | null
+          category: Database["public"]["Enums"]["follow_up_category"]
+          completed_at: string | null
+          created_at: string
+          created_by: string | null
+          due_date: string
+          first_timer_id: string | null
+          id: string
+          member_id: string | null
+          notes: string | null
+          organization_id: string
+          person_name: string
+          priority: Database["public"]["Enums"]["care_priority"]
+          reason: string
+          status: Database["public"]["Enums"]["follow_up_task_status"]
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          category?: Database["public"]["Enums"]["follow_up_category"]
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_date?: string
+          first_timer_id?: string | null
+          id?: string
+          member_id?: string | null
+          notes?: string | null
+          organization_id: string
+          person_name: string
+          priority?: Database["public"]["Enums"]["care_priority"]
+          reason: string
+          status?: Database["public"]["Enums"]["follow_up_task_status"]
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: Database["public"]["Enums"]["follow_up_category"]
+          completed_at?: string | null
+          created_at?: string
+          created_by?: string | null
+          due_date?: string
+          first_timer_id?: string | null
+          id?: string
+          member_id?: string | null
+          notes?: string | null
+          organization_id?: string
+          person_name?: string
+          priority?: Database["public"]["Enums"]["care_priority"]
+          reason?: string
+          status?: Database["public"]["Enums"]["follow_up_task_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "follow_up_tasks_first_timer_id_fkey"
+            columns: ["first_timer_id"]
+            isOneToOne: false
+            referencedRelation: "first_timers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_up_tasks_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "follow_up_tasks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       members: {
         Row: {
           address: string | null
@@ -475,6 +554,12 @@ export type Database = {
         | "special_event"
         | "other"
       attendance_status: "present" | "absent" | "excused"
+      care_priority: "urgent" | "needs_follow_up" | "watch"
+      follow_up_category:
+        | "missed_services"
+        | "first_timer"
+        | "prayer_request"
+        | "general_care"
       follow_up_status:
         | "new"
         | "contacted"
@@ -483,6 +568,7 @@ export type Database = {
         | "connected"
         | "converted"
         | "no_response"
+      follow_up_task_status: "open" | "in_progress" | "completed" | "cancelled"
       gender: "male" | "female" | "other"
       marital_status: "single" | "married" | "divorced" | "widowed" | "other"
       member_status:
@@ -638,6 +724,13 @@ export const Constants = {
         "other",
       ],
       attendance_status: ["present", "absent", "excused"],
+      care_priority: ["urgent", "needs_follow_up", "watch"],
+      follow_up_category: [
+        "missed_services",
+        "first_timer",
+        "prayer_request",
+        "general_care",
+      ],
       follow_up_status: [
         "new",
         "contacted",
@@ -647,6 +740,7 @@ export const Constants = {
         "converted",
         "no_response",
       ],
+      follow_up_task_status: ["open", "in_progress", "completed", "cancelled"],
       gender: ["male", "female", "other"],
       marital_status: ["single", "married", "divorced", "widowed", "other"],
       member_status: [
