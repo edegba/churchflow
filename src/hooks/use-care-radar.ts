@@ -17,31 +17,49 @@ export type FollowUpTaskValues = Omit<
 
 export const priorityLabels: Record<CarePriority, string> = {
   urgent: "Urgent",
+  high: "High",
   needs_follow_up: "Needs follow-up",
+  normal: "Normal",
   watch: "Watch",
+  low: "Low",
 };
+
+/** The four priorities offered when creating or editing a follow-up. */
+export const followUpPriorities: CarePriority[] = ["urgent", "high", "normal", "low"];
 
 export const priorityTone: Record<CarePriority, string> = {
   urgent: "bg-destructive/10 text-destructive",
+  high: "bg-orange-500/15 text-orange-700 dark:text-orange-400",
   needs_follow_up: "bg-amber-500/15 text-amber-700 dark:text-amber-400",
+  normal: "bg-primary/10 text-primary",
   watch: "bg-yellow-400/15 text-yellow-700 dark:text-yellow-400",
+  low: "bg-muted text-muted-foreground",
 };
 
 export const priorityDot: Record<CarePriority, string> = {
   urgent: "bg-destructive",
+  high: "bg-orange-500",
   needs_follow_up: "bg-amber-500",
+  normal: "bg-primary",
   watch: "bg-yellow-400",
+  low: "bg-muted-foreground",
 };
 
 export const categoryLabels: Record<FollowUpCategory, string> = {
-  missed_services: "Missed services",
-  first_timer: "First timer welcome",
+  first_timer: "First timer",
+  missed_services: "Missed service",
+  pastoral_care: "Pastoral care",
   prayer_request: "Prayer request",
+  new_member: "New member",
+  birthday: "Birthday",
+  feedback_concern: "Feedback concern",
+  group_follow_up: "Group/cell follow-up",
   general_care: "General care",
+  other: "Other",
 };
 
 export const taskStatusLabels: Record<FollowUpTaskStatus, string> = {
-  open: "Open",
+  open: "Pending",
   in_progress: "In progress",
   completed: "Completed",
   cancelled: "Cancelled",
@@ -49,9 +67,13 @@ export const taskStatusLabels: Record<FollowUpTaskStatus, string> = {
 
 const priorityRank: Record<CarePriority, number> = {
   urgent: 0,
-  needs_follow_up: 1,
-  watch: 2,
+  high: 1,
+  needs_follow_up: 2,
+  normal: 3,
+  watch: 4,
+  low: 5,
 };
+
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
@@ -118,12 +140,32 @@ export function useSaveFollowUpTask(organizationId: string | undefined) {
 export function useUpdateTaskStatus(organizationId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: FollowUpTaskStatus }) => {
+    mutationFn: async ({
+      id,
+      status,
+      completionNote,
+      existingNotes,
+    }: {
+      id: string;
+      status: FollowUpTaskStatus;
+      completionNote?: string;
+      existingNotes?: string | null;
+    }) => {
+      const note = completionNote?.trim();
+      const stamp = new Date().toLocaleDateString(undefined, {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+      const notes = note
+        ? [existingNotes?.trim(), `[${stamp}] ${note}`].filter(Boolean).join("\n")
+        : undefined;
       const { error } = await supabase
         .from("follow_up_tasks")
         .update({
           status,
           completed_at: status === "completed" ? new Date().toISOString() : null,
+          ...(notes ? { notes } : {}),
         })
         .eq("id", id);
       if (error) throw error;
@@ -133,6 +175,31 @@ export function useUpdateTaskStatus(organizationId: string | undefined) {
     },
   });
 }
+
+/** A follow-up is overdue when it is still open/in progress and its due date has passed. */
+export function isOverdue(task: FollowUpTask) {
+  return (
+    (task.status === "open" || task.status === "in_progress") && task.due_date < todayISO()
+  );
+}
+
+export function isDueToday(task: FollowUpTask) {
+  return (
+    (task.status === "open" || task.status === "in_progress") && task.due_date === todayISO()
+  );
+}
+
+export function isOpenTask(task: FollowUpTask) {
+  return task.status === "open" || task.status === "in_progress";
+}
+
+export function followUpPermissions(role: string | undefined) {
+  return {
+    canView: Boolean(role) && role !== "finance_officer",
+    canManage: role ? MANAGE_ROLES.includes(role) : false,
+  };
+}
+
 
 export type CareItem = {
   key: string;
