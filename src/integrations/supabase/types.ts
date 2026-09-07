@@ -229,6 +229,7 @@ export type Database = {
           priority: Database["public"]["Enums"]["care_priority"]
           reason: string
           status: Database["public"]["Enums"]["follow_up_task_status"]
+          title: string | null
           updated_at: string
         }
         Insert: {
@@ -247,6 +248,7 @@ export type Database = {
           priority?: Database["public"]["Enums"]["care_priority"]
           reason: string
           status?: Database["public"]["Enums"]["follow_up_task_status"]
+          title?: string | null
           updated_at?: string
         }
         Update: {
@@ -265,6 +267,7 @@ export type Database = {
           priority?: Database["public"]["Enums"]["care_priority"]
           reason?: string
           status?: Database["public"]["Enums"]["follow_up_task_status"]
+          title?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -554,12 +557,24 @@ export type Database = {
         | "special_event"
         | "other"
       attendance_status: "present" | "absent" | "excused"
-      care_priority: "urgent" | "needs_follow_up" | "watch"
+      care_priority:
+        | "urgent"
+        | "needs_follow_up"
+        | "watch"
+        | "high"
+        | "normal"
+        | "low"
       follow_up_category:
         | "missed_services"
         | "first_timer"
         | "prayer_request"
         | "general_care"
+        | "pastoral_care"
+        | "new_member"
+        | "birthday"
+        | "feedback_concern"
+        | "group_follow_up"
+        | "other"
       follow_up_status:
         | "new"
         | "contacted"
@@ -724,12 +739,25 @@ export const Constants = {
         "other",
       ],
       attendance_status: ["present", "absent", "excused"],
-      care_priority: ["urgent", "needs_follow_up", "watch"],
+      care_priority: [
+        "urgent",
+        "needs_follow_up",
+        "watch",
+        "high",
+        "normal",
+        "low",
+      ],
       follow_up_category: [
         "missed_services",
         "first_timer",
         "prayer_request",
         "general_care",
+        "pastoral_care",
+        "new_member",
+        "birthday",
+        "feedback_concern",
+        "group_follow_up",
+        "other",
       ],
       follow_up_status: [
         "new",
