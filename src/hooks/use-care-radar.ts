@@ -140,12 +140,32 @@ export function useSaveFollowUpTask(organizationId: string | undefined) {
 export function useUpdateTaskStatus(organizationId: string | undefined) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, status }: { id: string; status: FollowUpTaskStatus }) => {
+    mutationFn: async ({
+      id,
+      status,
+      completionNote,
+      existingNotes,
+    }: {
+      id: string;
+      status: FollowUpTaskStatus;
+      completionNote?: string;
+      existingNotes?: string | null;
+    }) => {
+      const note = completionNote?.trim();
+      const stamp = new Date().toLocaleDateString(undefined, {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      });
+      const notes = note
+        ? [existingNotes?.trim(), `[${stamp}] ${note}`].filter(Boolean).join("\n")
+        : undefined;
       const { error } = await supabase
         .from("follow_up_tasks")
         .update({
           status,
           completed_at: status === "completed" ? new Date().toISOString() : null,
+          ...(notes ? { notes } : {}),
         })
         .eq("id", id);
       if (error) throw error;
@@ -155,6 +175,31 @@ export function useUpdateTaskStatus(organizationId: string | undefined) {
     },
   });
 }
+
+/** A follow-up is overdue when it is still open/in progress and its due date has passed. */
+export function isOverdue(task: FollowUpTask) {
+  return (
+    (task.status === "open" || task.status === "in_progress") && task.due_date < todayISO()
+  );
+}
+
+export function isDueToday(task: FollowUpTask) {
+  return (
+    (task.status === "open" || task.status === "in_progress") && task.due_date === todayISO()
+  );
+}
+
+export function isOpenTask(task: FollowUpTask) {
+  return task.status === "open" || task.status === "in_progress";
+}
+
+export function followUpPermissions(role: string | undefined) {
+  return {
+    canView: Boolean(role) && role !== "finance_officer",
+    canManage: role ? MANAGE_ROLES.includes(role) : false,
+  };
+}
+
 
 export type CareItem = {
   key: string;
