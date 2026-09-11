@@ -26,6 +26,7 @@ import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/empty-state";
 import { MemberFormDialog } from "@/components/member-form-dialog";
 import { MemberAttendancePanel } from "@/components/member-attendance-panel";
+import { MemberFollowUpPanel } from "@/components/member-follow-up-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -229,11 +230,7 @@ function MemberProfilePage() {
         </TabsContent>
 
         <TabsContent value="follow-up" className="mt-4">
-          <EmptyState
-            icon={PhoneCall}
-            title="Follow-up is coming in the next module"
-            description="Calls, visits and care assignments for this member will be logged here."
-          />
+          <MemberFollowUpPanel memberId={member.id} memberName={memberFullName(member)} />
         </TabsContent>
 
         <TabsContent value="prayer" className="mt-4">

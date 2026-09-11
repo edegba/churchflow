@@ -27,6 +27,7 @@ import { genderLabels } from "@/hooks/use-members";
 import { AppShell } from "@/components/app-shell";
 import { EmptyState } from "@/components/empty-state";
 import { FirstTimerFormDialog } from "@/components/first-timer-form-dialog";
+import { FirstTimerFollowUpPanel } from "@/components/first-timer-follow-up-panel";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -269,10 +270,9 @@ function FirstTimerProfilePage() {
             />
             <Field label="Assigned to" value={assignedName} />
           </SectionCard>
-          <EmptyState
-            icon={PhoneCall}
-            title="No follow-up activity yet"
-            description="Calls, visits and automated welcome workflows will appear here once the Follow-Up module is enabled."
+          <FirstTimerFollowUpPanel
+            firstTimerId={firstTimer.id}
+            firstTimerName={firstTimerFullName(firstTimer)}
           />
         </TabsContent>
 

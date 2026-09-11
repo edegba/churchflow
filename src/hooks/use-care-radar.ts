@@ -357,3 +357,50 @@ export function careRadarPermissions(role: string | undefined) {
     canUpdateTask: role ? MANAGE_ROLES.includes(role) : false,
   };
 }
+
+export function useDeleteFollowUpTask(organizationId: string | undefined) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const { error } = await supabase.from("follow_up_tasks").delete().eq("id", id);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["follow-up-tasks", organizationId] });
+    },
+  });
+}
+
+/** Follow-up tasks for a specific member. */
+export function useMemberFollowUps(memberId: string | undefined) {
+  return useQuery({
+    queryKey: ["member-follow-ups", memberId],
+    enabled: Boolean(memberId),
+    queryFn: async (): Promise<FollowUpTask[]> => {
+      const { data, error } = await supabase
+        .from("follow_up_tasks")
+        .select("*")
+        .eq("member_id", memberId!)
+        .order("due_date", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
+
+/** Follow-up tasks for a specific first timer. */
+export function useFirstTimerFollowUps(firstTimerId: string | undefined) {
+  return useQuery({
+    queryKey: ["first-timer-follow-ups", firstTimerId],
+    enabled: Boolean(firstTimerId),
+    queryFn: async (): Promise<FollowUpTask[]> => {
+      const { data, error } = await supabase
+        .from("follow_up_tasks")
+        .select("*")
+        .eq("first_timer_id", firstTimerId!)
+        .order("due_date", { ascending: true });
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+}
