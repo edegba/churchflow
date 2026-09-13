@@ -146,9 +146,7 @@ export function FirstTimerFollowUpPanel({
           {completed.length > 0 ? (
             <Card>
               <CardHeader className="pb-3">
-                <CardTitle className="text-base">
-                  Completed history ({completed.length})
-                </CardTitle>
+                <CardTitle className="text-base">Completed history ({completed.length})</CardTitle>
               </CardHeader>
               <CardContent className="divide-y py-0">
                 {completed.map((t) => (
@@ -172,11 +170,7 @@ export function FirstTimerFollowUpPanel({
         onOpenChange={setDialogOpen}
         organizationId={orgId}
         task={editing}
-        lockPerson={
-          !editing
-            ? { firstTimerId, name: firstTimerName }
-            : null
-        }
+        lockPerson={!editing ? { firstTimerId, name: firstTimerName } : null}
       />
 
       <Dialog
@@ -255,11 +249,9 @@ function FollowUpRow({
         </p>
         <p className="text-xs text-muted-foreground">
           Assigned to{" "}
-          {task.assigned_to ? staffNames.get(task.assigned_to) ?? "a team member" : "Unassigned"}
+          {task.assigned_to ? (staffNames.get(task.assigned_to) ?? "a team member") : "Unassigned"}
         </p>
-        {task.notes ? (
-          <p className="mt-1 text-xs text-muted-foreground">{task.notes}</p>
-        ) : null}
+        {task.notes ? <p className="mt-1 text-xs text-muted-foreground">{task.notes}</p> : null}
       </div>
       <div className="flex shrink-0 items-center gap-1.5">
         <span

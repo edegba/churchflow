@@ -106,6 +106,15 @@ const PAGE_SIZE = 12;
 
 type SortKey = "due_soonest" | "due_latest" | "priority_high" | "priority_low" | "recent";
 
+const priorityRank: Record<string, number> = {
+  urgent: 0,
+  high: 1,
+  needs_follow_up: 2,
+  normal: 3,
+  watch: 4,
+  low: 5,
+};
+
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -172,10 +181,7 @@ function FollowUpPage() {
   const [completing, setCompleting] = useState<FollowUpTask | null>(null);
   const [completionNote, setCompletionNote] = useState("");
 
-  const staffNames = useMemo(
-    () => new Map((staff ?? []).map((s) => [s.userId, s.name])),
-    [staff],
-  );
+  const staffNames = useMemo(() => new Map((staff ?? []).map((s) => [s.userId, s.name])), [staff]);
 
   const stats = useMemo(() => {
     if (!tasks) return { open: 0, dueToday: 0, overdue: 0, completed: 0 };
@@ -186,15 +192,6 @@ function FollowUpPage() {
     return { open, dueToday, overdue, completed };
   }, [tasks]);
 
-  const priorityRank: Record<string, number> = {
-    urgent: 0,
-    high: 1,
-    needs_follow_up: 2,
-    normal: 3,
-    watch: 4,
-    low: 5,
-  };
-
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     const today = todayISO();
@@ -202,7 +199,11 @@ function FollowUpPage() {
       if (statusFilter !== "all" && t.status !== statusFilter) return false;
       if (priorityFilter !== "all" && t.priority !== priorityFilter) return false;
       if (assigneeFilter === "unassigned" && t.assigned_to) return false;
-      if (assigneeFilter !== "all" && assigneeFilter !== "unassigned" && t.assigned_to !== assigneeFilter)
+      if (
+        assigneeFilter !== "all" &&
+        assigneeFilter !== "unassigned" &&
+        t.assigned_to !== assigneeFilter
+      )
         return false;
       if (dueFilter === "overdue" && !isOverdue(t)) return false;
       if (dueFilter === "today" && !isDueToday(t)) return false;
@@ -449,7 +450,10 @@ function FollowUpPage() {
 
                 <div className="space-y-1.5">
                   <Label className="text-xs text-muted-foreground">Due date</Label>
-                  <Select value={dueFilter} onValueChange={(v) => setDueFilter(v as typeof dueFilter)}>
+                  <Select
+                    value={dueFilter}
+                    onValueChange={(v) => setDueFilter(v as typeof dueFilter)}
+                  >
                     <SelectTrigger aria-label="Filter by due date">
                       <SelectValue />
                     </SelectTrigger>
@@ -500,9 +504,7 @@ function FollowUpPage() {
         <EmptyState
           icon={PhoneCall}
           title={
-            tasks && tasks.length > 0
-              ? "No follow-ups match your filters"
-              : "No follow-ups yet"
+            tasks && tasks.length > 0 ? "No follow-ups match your filters" : "No follow-ups yet"
           }
           description={
             tasks && tasks.length > 0
@@ -530,10 +532,7 @@ function FollowUpPage() {
               const overdue = isOverdue(t);
               const dueTodayFlag = isDueToday(t);
               return (
-                <Card
-                  key={t.id}
-                  className={cn(overdue && "border-destructive/40")}
-                >
+                <Card key={t.id} className={cn(overdue && "border-destructive/40")}>
                   <CardContent className="space-y-3 py-4">
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
@@ -564,7 +563,10 @@ function FollowUpPage() {
                           Overdue
                         </Badge>
                       ) : dueTodayFlag ? (
-                        <Badge className="bg-warning/15 text-warning-foreground" variant="secondary">
+                        <Badge
+                          className="bg-warning/15 text-warning-foreground"
+                          variant="secondary"
+                        >
                           Due today
                         </Badge>
                       ) : null}
@@ -573,7 +575,7 @@ function FollowUpPage() {
                     <p className="text-xs text-muted-foreground">
                       Assigned to{" "}
                       {t.assigned_to
-                        ? staffNames.get(t.assigned_to) ?? "a team member"
+                        ? (staffNames.get(t.assigned_to) ?? "a team member")
                         : "Unassigned"}
                     </p>
 
@@ -681,7 +683,10 @@ function FollowUpPage() {
                         <div className="flex items-center gap-1.5">
                           <Badge variant="outline">{taskStatusLabels[t.status]}</Badge>
                           {overdue ? (
-                            <Badge className="bg-destructive/10 text-destructive" variant="secondary">
+                            <Badge
+                              className="bg-destructive/10 text-destructive"
+                              variant="secondary"
+                            >
                               Overdue
                             </Badge>
                           ) : dueTodayFlag ? (
@@ -696,7 +701,7 @@ function FollowUpPage() {
                       </TableCell>
                       <TableCell className="max-w-[10rem] truncate">
                         {t.assigned_to
-                          ? staffNames.get(t.assigned_to) ?? "Team member"
+                          ? (staffNames.get(t.assigned_to) ?? "Team member")
                           : "Unassigned"}
                       </TableCell>
                       <TableCell>

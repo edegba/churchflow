@@ -74,7 +74,6 @@ const priorityRank: Record<CarePriority, number> = {
   low: 5,
 };
 
-
 function todayISO() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -178,15 +177,11 @@ export function useUpdateTaskStatus(organizationId: string | undefined) {
 
 /** A follow-up is overdue when it is still open/in progress and its due date has passed. */
 export function isOverdue(task: FollowUpTask) {
-  return (
-    (task.status === "open" || task.status === "in_progress") && task.due_date < todayISO()
-  );
+  return (task.status === "open" || task.status === "in_progress") && task.due_date < todayISO();
 }
 
 export function isDueToday(task: FollowUpTask) {
-  return (
-    (task.status === "open" || task.status === "in_progress") && task.due_date === todayISO()
-  );
+  return (task.status === "open" || task.status === "in_progress") && task.due_date === todayISO();
 }
 
 export function isOpenTask(task: FollowUpTask) {
@@ -199,7 +194,6 @@ export function followUpPermissions(role: string | undefined) {
     canManage: role ? MANAGE_ROLES.includes(role) : false,
   };
 }
-
 
 export type CareItem = {
   key: string;
@@ -228,7 +222,10 @@ export function useCareRadar(organizationId: string | undefined) {
   const members = useMembers(organizationId);
   const firstTimers = useFirstTimers(organizationId);
   const tasks = useFollowUpTasks(organizationId);
-  const signals = useAttendanceSignals(organizationId, { eventType: "sunday_service", lookback: 8 });
+  const signals = useAttendanceSignals(organizationId, {
+    eventType: "sunday_service",
+    lookback: 8,
+  });
 
   const items = useMemo<CareItem[]>(() => {
     if (!members.data || !firstTimers.data || !tasks.data) return [];
@@ -292,7 +289,10 @@ export function useCareRadar(organizationId: string | undefined) {
         key: `first-timer:${ft.id}`,
         personName: firstTimerFullName(ft),
         phone: ft.phone,
-        reason: ft.follow_up_status === "no_response" ? "No response yet" : "First timer awaiting follow-up",
+        reason:
+          ft.follow_up_status === "no_response"
+            ? "No response yet"
+            : "First timer awaiting follow-up",
         detail:
           age <= 0
             ? "Visited today"
