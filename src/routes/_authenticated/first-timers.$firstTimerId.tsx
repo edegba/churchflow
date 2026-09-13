@@ -201,10 +201,7 @@ function FirstTimerProfilePage() {
 
           {firstTimer.converted_to_member && firstTimer.converted_member_id ? (
             <Button asChild variant="outline" className="w-full sm:w-auto">
-              <Link
-                to="/members/$memberId"
-                params={{ memberId: firstTimer.converted_member_id }}
-              >
+              <Link to="/members/$memberId" params={{ memberId: firstTimer.converted_member_id }}>
                 <UserCheck className="size-4" aria-hidden="true" /> View member record
               </Link>
             </Button>

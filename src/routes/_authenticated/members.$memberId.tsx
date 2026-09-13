@@ -181,10 +181,7 @@ function MemberProfilePage() {
             <Field label="First name" value={member.first_name} />
             <Field label="Other name" value={member.other_name} />
             <Field label="Last name" value={member.last_name} />
-            <Field
-              label="Gender"
-              value={member.gender ? genderLabels[member.gender] : null}
-            />
+            <Field label="Gender" value={member.gender ? genderLabels[member.gender] : null} />
             <Field label="Date of birth" value={formatDate(member.date_of_birth)} />
             <Field
               label="Marital status"
@@ -218,10 +215,7 @@ function MemberProfilePage() {
               label="Record created"
               value={new Date(member.created_at).toLocaleDateString()}
             />
-            <Field
-              label="Last updated"
-              value={new Date(member.updated_at).toLocaleDateString()}
-            />
+            <Field label="Last updated" value={new Date(member.updated_at).toLocaleDateString()} />
           </SectionCard>
         </TabsContent>
 
