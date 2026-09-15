@@ -5,19 +5,18 @@ import {
   ChevronLeft,
   ChevronRight,
   HandHeart,
-  Loader2,
   Pencil,
   Plus,
   Search,
   SlidersHorizontal,
   Trash2,
   UserRound,
+  type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useMembership } from "@/hooks/use-organization";
 import { useMembers } from "@/hooks/use-members";
 import { useFirstTimers } from "@/hooks/use-first-timers";
-import { useOrgStaff } from "@/hooks/use-first-timers";
 import { memberFullName } from "@/hooks/use-members";
 import { firstTimerFullName } from "@/hooks/use-first-timers";
 import {
@@ -30,7 +29,6 @@ import {
   prayerVisibilityLabels,
   useDeletePrayerRequest,
   usePrayerRequests,
-  useSavePrayerRequest,
   type PrayerRequest,
   type PrayerRequestCategory,
   type PrayerRequestPriority,
@@ -61,7 +59,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -72,14 +69,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/prayer-requests")({
@@ -112,7 +101,7 @@ function StatCard({
   loading,
   tone,
 }: {
-  icon: typeof HandHeart;
+  icon: LucideIcon;
   label: string;
   value: number;
   loading: boolean;
@@ -150,8 +139,6 @@ function PrayerRequestsPage() {
   const { data: requests, isLoading, error } = usePrayerRequests(orgId);
   const { data: members } = useMembers(orgId);
   const { data: firstTimers } = useFirstTimers(orgId);
-  const { data: staff } = useOrgStaff(orgId);
-  const saveRequest = useSavePrayerRequest(orgId);
   const deleteRequest = useDeletePrayerRequest(orgId);
 
   const [search, setSearch] = useState("");
@@ -165,8 +152,6 @@ function PrayerRequestsPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<PrayerRequest | null>(null);
   const [pendingDelete, setPendingDelete] = useState<PrayerRequest | null>(null);
-  const [responding, setResponding] = useState<PrayerRequest | null>(null);
-  const [responseText, setResponseText] = useState("");
 
   const memberById = useMemo(
     () => new Map((members ?? []).map((m) => [m.id, m])),
@@ -176,11 +161,6 @@ function PrayerRequestsPage() {
     () => new Map((firstTimers ?? []).map((f) => [f.id, f])),
     [firstTimers],
   );
-  const staffNames = useMemo(
-    () => new Map((staff ?? []).map((s) => [s.userId, s.name])),
-    [staff],
-  );
-
   const stats = useMemo(() => {
     if (!requests) return { total: 0, new: 0, praying: 0, answered: 0 };
     return {
@@ -250,32 +230,6 @@ function PrayerRequestsPage() {
       toast.error(e instanceof Error ? e.message : "Could not remove this prayer request");
     } finally {
       setPendingDelete(null);
-    }
-  }
-
-  async function confirmResponse() {
-    if (!responding) return;
-    try {
-      await saveRequest.mutateAsync({
-        id: responding.id,
-        values: {
-          request_text: responding.request_text,
-          category: responding.category,
-          priority: responding.priority,
-          visibility: responding.visibility,
-          is_anonymous: responding.is_anonymous,
-          member_id: responding.member_id,
-          first_timer_id: responding.first_timer_id,
-          assigned_to: responding.assigned_to,
-          response_notes: responseText.trim() || null,
-          status: "in_progress",
-        },
-      });
-      toast.success("Response saved");
-      setResponding(null);
-      setResponseText("");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not save response");
     }
   }
 

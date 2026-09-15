@@ -3,7 +3,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowLeft,
   CalendarCheck,
-  HandHeart,
   Mail,
   MessageSquare,
   Pencil,
@@ -27,6 +26,7 @@ import { EmptyState } from "@/components/empty-state";
 import { MemberFormDialog } from "@/components/member-form-dialog";
 import { MemberAttendancePanel } from "@/components/member-attendance-panel";
 import { MemberFollowUpPanel } from "@/components/member-follow-up-panel";
+import { MemberPrayerPanel } from "@/components/member-prayer-panel";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -228,11 +228,7 @@ function MemberProfilePage() {
         </TabsContent>
 
         <TabsContent value="prayer" className="mt-4">
-          <EmptyState
-            icon={HandHeart}
-            title="Prayer requests are coming in the next module"
-            description="Prayer requests this member submits will be listed here for your care team."
-          />
+          <MemberPrayerPanel memberId={member.id} memberName={memberFullName(member)} />
         </TabsContent>
 
         <TabsContent value="communication" className="mt-4">

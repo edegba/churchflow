@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
 import { useMembers } from "@/hooks/use-members";
 import { useFirstTimers } from "@/hooks/use-first-timers";
 import {

@@ -4,13 +4,13 @@ import {
   ArrowUpDown,
   ChevronLeft,
   ChevronRight,
-  Loader2,
   MessageSquare,
   Pencil,
   Plus,
   Search,
   SlidersHorizontal,
   Trash2,
+  type LucideIcon,
 } from "lucide-react";
 import { toast } from "sonner";
 import { useMembership } from "@/hooks/use-organization";
@@ -23,7 +23,6 @@ import {
   feedbackStatusTone,
   useDeleteFeedback,
   useFeedback,
-  useSaveFeedback,
   type Feedback,
   type FeedbackCategory,
   type FeedbackPriority,
@@ -54,7 +53,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Textarea } from "@/components/ui/textarea";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,14 +63,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/_authenticated/feedback")({
@@ -99,7 +89,13 @@ const priorityRank: Record<string, number> = {
 };
 
 function StatCard({
-  icon: typeof MessageSquare;
+  icon: Icon,
+  label,
+  value,
+  loading,
+  tone,
+}: {
+  icon: LucideIcon;
   label: string;
   value: number;
   loading: boolean;
@@ -135,7 +131,6 @@ function FeedbackPage() {
   const perms = feedbackPermissions(membership?.role);
 
   const { data: feedbackItems, isLoading, error } = useFeedback(orgId);
-  const saveFeedback = useSaveFeedback(orgId);
   const deleteFeedback = useDeleteFeedback(orgId);
 
   const [search, setSearch] = useState("");
@@ -149,8 +144,6 @@ function FeedbackPage() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editing, setEditing] = useState<Feedback | null>(null);
   const [pendingDelete, setPendingDelete] = useState<Feedback | null>(null);
-  const [responding, setResponding] = useState<Feedback | null>(null);
-  const [responseText, setResponseText] = useState("");
 
   const stats = useMemo(() => {
     if (!feedbackItems) return { total: 0, new: 0, inProgress: 0, resolved: 0 };
@@ -221,32 +214,6 @@ function FeedbackPage() {
       toast.error(e instanceof Error ? e.message : "Could not remove this feedback");
     } finally {
       setPendingDelete(null);
-    }
-  }
-
-  async function confirmResponse() {
-    if (!responding) return;
-    try {
-      await saveFeedback.mutateAsync({
-        id: responding.id,
-        values: {
-          subject: responding.subject,
-          message: responding.message,
-          category: responding.category,
-          priority: responding.priority,
-          is_anonymous: responding.is_anonymous,
-          member_id: responding.member_id,
-          first_timer_id: responding.first_timer_id,
-          assigned_to: responding.assigned_to,
-          response_notes: responseText.trim() || null,
-          status: "in_progress",
-        },
-      });
-      toast.success("Response saved");
-      setResponding(null);
-      setResponseText("");
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Could not save response");
     }
   }
 
