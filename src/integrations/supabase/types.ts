@@ -212,6 +212,82 @@ export type Database = {
           },
         ]
       }
+      feedback: {
+        Row: {
+          assigned_to: string | null
+          category: Database["public"]["Enums"]["feedback_category"]
+          created_at: string
+          created_by: string | null
+          first_timer_id: string | null
+          id: string
+          is_anonymous: boolean
+          member_id: string | null
+          message: string
+          organization_id: string
+          priority: Database["public"]["Enums"]["feedback_priority"]
+          response_notes: string | null
+          status: Database["public"]["Enums"]["feedback_status"]
+          subject: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          category?: Database["public"]["Enums"]["feedback_category"]
+          created_at?: string
+          created_by?: string | null
+          first_timer_id?: string | null
+          id?: string
+          is_anonymous?: boolean
+          member_id?: string | null
+          message: string
+          organization_id: string
+          priority?: Database["public"]["Enums"]["feedback_priority"]
+          response_notes?: string | null
+          status?: Database["public"]["Enums"]["feedback_status"]
+          subject: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: Database["public"]["Enums"]["feedback_category"]
+          created_at?: string
+          created_by?: string | null
+          first_timer_id?: string | null
+          id?: string
+          is_anonymous?: boolean
+          member_id?: string | null
+          message?: string
+          organization_id?: string
+          priority?: Database["public"]["Enums"]["feedback_priority"]
+          response_notes?: string | null
+          status?: Database["public"]["Enums"]["feedback_status"]
+          subject?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "feedback_first_timer_id_fkey"
+            columns: ["first_timer_id"]
+            isOneToOne: false
+            referencedRelation: "first_timers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "feedback_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       follow_up_tasks: {
         Row: {
           assigned_to: string | null
@@ -287,6 +363,82 @@ export type Database = {
           },
           {
             foreignKeyName: "follow_up_tasks_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prayer_requests: {
+        Row: {
+          assigned_to: string | null
+          category: Database["public"]["Enums"]["prayer_request_category"]
+          created_at: string
+          created_by: string | null
+          first_timer_id: string | null
+          id: string
+          is_anonymous: boolean
+          member_id: string | null
+          organization_id: string
+          priority: Database["public"]["Enums"]["prayer_request_priority"]
+          request_text: string
+          response_notes: string | null
+          status: Database["public"]["Enums"]["prayer_request_status"]
+          updated_at: string
+          visibility: Database["public"]["Enums"]["prayer_request_visibility"]
+        }
+        Insert: {
+          assigned_to?: string | null
+          category?: Database["public"]["Enums"]["prayer_request_category"]
+          created_at?: string
+          created_by?: string | null
+          first_timer_id?: string | null
+          id?: string
+          is_anonymous?: boolean
+          member_id?: string | null
+          organization_id: string
+          priority?: Database["public"]["Enums"]["prayer_request_priority"]
+          request_text: string
+          response_notes?: string | null
+          status?: Database["public"]["Enums"]["prayer_request_status"]
+          updated_at?: string
+          visibility?: Database["public"]["Enums"]["prayer_request_visibility"]
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: Database["public"]["Enums"]["prayer_request_category"]
+          created_at?: string
+          created_by?: string | null
+          first_timer_id?: string | null
+          id?: string
+          is_anonymous?: boolean
+          member_id?: string | null
+          organization_id?: string
+          priority?: Database["public"]["Enums"]["prayer_request_priority"]
+          request_text?: string
+          response_notes?: string | null
+          status?: Database["public"]["Enums"]["prayer_request_status"]
+          updated_at?: string
+          visibility?: Database["public"]["Enums"]["prayer_request_visibility"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prayer_requests_first_timer_id_fkey"
+            columns: ["first_timer_id"]
+            isOneToOne: false
+            referencedRelation: "first_timers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prayer_requests_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "prayer_requests_organization_id_fkey"
             columns: ["organization_id"]
             isOneToOne: false
             referencedRelation: "organizations"
@@ -584,6 +736,20 @@ export type Database = {
         | "converted"
         | "no_response"
       follow_up_task_status: "open" | "in_progress" | "completed" | "cancelled"
+      feedback_category:
+        | "service_quality"
+        | "suggestion"
+        | "complaint"
+        | "appreciation"
+        | "question"
+        | "other"
+      feedback_priority: "urgent" | "high" | "normal" | "low"
+      feedback_status:
+        | "new"
+        | "reviewing"
+        | "in_progress"
+        | "resolved"
+        | "archived"
       gender: "male" | "female" | "other"
       marital_status: "single" | "married" | "divorced" | "widowed" | "other"
       member_status:
@@ -593,6 +759,24 @@ export type Database = {
         | "deceased"
         | "visitor"
         | "first_timer"
+      prayer_request_category:
+        | "general"
+        | "healing"
+        | "financial"
+        | "family"
+        | "spiritual_guidance"
+        | "thanksgiving"
+        | "deliverance"
+        | "other"
+      prayer_request_priority: "urgent" | "high" | "normal" | "low"
+      prayer_request_status:
+        | "new"
+        | "praying"
+        | "in_progress"
+        | "answered"
+        | "ongoing"
+        | "closed"
+      prayer_request_visibility: "public" | "leadership_only" | "private"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -778,6 +962,42 @@ export const Constants = {
         "deceased",
         "visitor",
         "first_timer",
+      ],
+      prayer_request_category: [
+        "general",
+        "healing",
+        "financial",
+        "family",
+        "spiritual_guidance",
+        "thanksgiving",
+        "deliverance",
+        "other",
+      ],
+      prayer_request_priority: ["urgent", "high", "normal", "low"],
+      prayer_request_status: [
+        "new",
+        "praying",
+        "in_progress",
+        "answered",
+        "ongoing",
+        "closed",
+      ],
+      prayer_request_visibility: ["public", "leadership_only", "private"],
+      feedback_category: [
+        "service_quality",
+        "suggestion",
+        "complaint",
+        "appreciation",
+        "question",
+        "other",
+      ],
+      feedback_priority: ["urgent", "high", "normal", "low"],
+      feedback_status: [
+        "new",
+        "reviewing",
+        "in_progress",
+        "resolved",
+        "archived",
       ],
     },
   },
